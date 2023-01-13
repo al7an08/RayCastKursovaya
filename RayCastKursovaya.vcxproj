@@ -151,7 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Boundary.cpp" />
+    <ClCompile Include="ConvertSketch.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapCollision.cpp" />
+    <ClCompile Include="Player.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Boundary.h" />
+    <ClInclude Include="ConvertSketch.h" />
+    <ClInclude Include="DegToRad.h" />
+    <ClInclude Include="Header.h" />
+    <ClInclude Include="MapCollision.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
