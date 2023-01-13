@@ -7,11 +7,12 @@
 #include "DegToRad.h"
 #include "MapCollision.h"
 
-Player::Player(float i_x, float i_y) :
+Player::Player(float i_x, float i_y, float i_hp) :
 	direction_horizontal(0),
 	direction_vertical(0),
 	x(i_x),
 	y(i_y),
+	hp(i_hp),
 	map_player_sprite(map_player_texture),
 	wall_sprite(wall_texture)
 {
@@ -19,7 +20,7 @@ Player::Player(float i_x, float i_y) :
 	wall_texture.loadFromFile("Resources/Images/Wall" + std::to_string(CELL_SIZE) + ".png");
 }
 
-void Player::draw_map(sf::RenderWindow& i_window)
+void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
 {
 	//Определяем направление взгляда игрока
 	float frame_angle = 360.f * MAP_CELL_SIZE / map_player_texture.getSize().x;
@@ -59,7 +60,6 @@ void Player::draw_screen(sf::RenderWindow& i_window)
 	float ray_start_x = x + 0.5f * CELL_SIZE;
 	float ray_start_y = y + 0.5f * CELL_SIZE;
 
-	//The column's position can be negative, so SHRT_MIN.
 	short previous_column = SHRT_MIN;
 
 	sf::RectangleShape floor_shape(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT - floor_level));
@@ -74,14 +74,10 @@ void Player::draw_screen(sf::RenderWindow& i_window)
 	{
 		if (true)
 		{
-			//When "a" is 0, this'll be +FOV / 2
-			//When "a" is SCREEN_WIDTH / 2, this'll be 0
-			//When "a" is SCREEN_WIDTH, this'll be -FOV / 2
 			float ray_direction = FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - a) / (SCREEN_WIDTH - 1);
-			//Finding the intersection between the ray and the projection.
+			//Пересечение между лучом и проекцией
 			float ray_projection_position = 0.5f * tan(deg_to_rad(ray_direction)) / tan(deg_to_rad(0.5f * FOV_HORIZONTAL));
 
-			//Current column's position on the screen.
 			//Положение текущей колонны на экране
 			short current_column = static_cast<short>(round(SCREEN_WIDTH * (0.5f - ray_projection_position)));
 			short next_column = SCREEN_WIDTH;
