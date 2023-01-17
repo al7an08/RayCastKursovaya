@@ -34,7 +34,7 @@ int main()
 	sf::Texture map_wall_texture;
 	map_wall_texture.loadFromFile("Resources/Images/MapWall" + std::to_string(MAP_CELL_SIZE) + ".png");
 
-	Player player(0, 0);
+	Player player(0, 0, 100);
 
 	map = convert_sketch(player);
 
@@ -117,6 +117,12 @@ int main()
 						for (unsigned short b = 0; b < MAP_HEIGHT; b++)
 						{
 							if (Cell::Wall == map[a][b])
+							{
+								map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
+
+								window.draw(map_wall_sprite);
+							}
+							else if (Cell::Wall1 == map[a][b]) 
 							{
 								map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
 

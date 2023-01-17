@@ -14,8 +14,8 @@ constexpr unsigned char CELL_SIZE = 64;
 //Размер ячейки на миникарте
 constexpr unsigned char MAP_CELL_SIZE = 8;
 constexpr unsigned char MAP_GRID_CELL_SIZE = 16;
-constexpr unsigned char MAP_HEIGHT = 24;
-constexpr unsigned char MAP_WIDTH = 40;
+constexpr unsigned char MAP_HEIGHT = 32;
+constexpr unsigned char MAP_WIDTH = 32;
 constexpr unsigned char SCREEN_RESIZE = 1;
 
 constexpr unsigned short SCREEN_HEIGHT = 720;
@@ -28,5 +28,6 @@ constexpr std::chrono::microseconds FRAME_DURATION(16667);
 enum Cell
 {
 	Empty,
-	Wall
+	Wall,
+	Wall1
 };
