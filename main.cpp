@@ -98,7 +98,7 @@ int main()
 				//ћен€ем цвет окна, рису€ таким образом небо
 				window.clear(sf::Color(73, 255, 255));
 
-				player.draw_screen(window);
+				player.draw_screen(window, map);
 
 				if (1 == draw_map)
 				{

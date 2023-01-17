@@ -25,7 +25,7 @@ public:
 	Player(float i_x, float i_y, float hp);
 
 	void draw_map(sf::RenderWindow& i_window);
-	void draw_screen(sf::RenderWindow& i_window);
+	void draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map);
 	void set_position(float i_x, float i_y);
 	void update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, const sf::RenderWindow& i_window);
 };
