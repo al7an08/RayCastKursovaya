@@ -7,17 +7,18 @@
 #include "DegToRad.h"
 #include "MapCollision.h"
 
-Player::Player(float i_x, float i_y, float i_hp) :
+Player::Player(float i_x, float i_y, float i_hp, Weapon& i_gun) :
 	direction_horizontal(0),
 	direction_vertical(0),
 	x(i_x),
 	y(i_y),
 	hp(i_hp),
+	gun(i_gun),
 	map_player_sprite(map_player_texture),
 	wall_sprite(wall_texture)
 {
 	map_player_texture.loadFromFile("Resources/Images/MapPlayer" + std::to_string(MAP_CELL_SIZE) + ".png");
-	wall_texture.loadFromFile("Resources/Images/Wall" + std::to_string(CELL_SIZE) + ".png");
+	wall_texture.loadFromFile("Resources/Images/Wall0" + std::to_string(CELL_SIZE) + ".png");
 }
 
 void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
@@ -130,14 +131,7 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 				unsigned char current_cell_x = static_cast<unsigned char>(floor(ray_end_x / CELL_SIZE));
 				unsigned char current_cell_y = static_cast<unsigned char>(floor(ray_end_y / CELL_SIZE));
 
-				if (i_map[current_cell_x][current_cell_y] == Cell::Wall) {
-					wall_texture.loadFromFile("Resources/Images/Wall" + std::to_string(CELL_SIZE) + ".png");
-					wall_sprite.setTexture( wall_texture);
-				}
-				if (i_map[current_cell_x][current_cell_y] == Cell::Wall1) {
-					wall_texture.loadFromFile("Resources/Images/Wall1" + std::to_string(CELL_SIZE) + ".png");
-					wall_sprite.setTexture(wall_texture);
-				}
+				
 				wall_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height));
 				wall_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE));
 				wall_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE));
@@ -196,7 +190,12 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 		step_x += MOVEMENT_SPEED * cos(deg_to_rad(direction_horizontal));
 		step_y -= MOVEMENT_SPEED * sin(deg_to_rad(direction_horizontal));
 	}
-
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		std::cout << "FIRE" << std::endl;
+		// левая кнопка мыши нажата, стреляем!
+		gun.fire();
+	}
 	if (0 == map_collision(step_x + x, step_y + y, i_map))
 	{
 		x += step_x;

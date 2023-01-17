@@ -8,7 +8,7 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(Player& i_pla
 	std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> output_map{};
 
 	sf::Image map_sketch;
-	map_sketch.loadFromFile("Resources/Images/map1.png");
+	map_sketch.loadFromFile("Resources/Images/map2.png");
 
 	for (unsigned char a = 0; a < MAP_WIDTH; a++)
 	{

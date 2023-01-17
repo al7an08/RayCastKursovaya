@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Header.h"
 #include <array>
+#include "Weapon.h"
 
 class Player
 {
@@ -12,7 +13,7 @@ private:
 	float x;
 	float y;
 	float hp;
-
+	Weapon& gun;
 	std::array<float, SCREEN_WIDTH> view_rays;
 
 	sf::Sprite map_player_sprite;
@@ -22,7 +23,7 @@ private:
 	sf::Texture map_player_texture;
 	sf::Texture wall_texture;
 public:
-	Player(float i_x, float i_y, float hp);
+	Player(float i_x, float i_y, float hp, Weapon& i_gun);
 
 	void draw_map(sf::RenderWindow& i_window);
 	void draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map);

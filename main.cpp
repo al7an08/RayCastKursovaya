@@ -6,6 +6,7 @@
 #include "MapCollision.h"
 #include "Player.h"
 #include "ConvertSketch.h"
+#include "Weapon.h"
 
 int main()
 {
@@ -34,7 +35,9 @@ int main()
 	sf::Texture map_wall_texture;
 	map_wall_texture.loadFromFile("Resources/Images/MapWall" + std::to_string(MAP_CELL_SIZE) + ".png");
 
-	Player player(0, 0, 100);
+	Weapon pistol(100, 10);
+
+	Player player(0, 0, 100, pistol);
 
 	map = convert_sketch(player);
 
@@ -130,7 +133,7 @@ int main()
 							}
 						}
 					}
-
+					pistol.draw(window);
 					player.draw_map(window);
 				}
 
