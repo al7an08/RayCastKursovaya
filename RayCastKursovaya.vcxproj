@@ -162,7 +162,6 @@
     <ClInclude Include="Boundary.h" />
     <ClInclude Include="ConvertSketch.h" />
     <ClInclude Include="DegToRad.h" />
-    <ClInclude Include="Entity.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="MapCollision.h" />
     <ClInclude Include="Player.h" />
