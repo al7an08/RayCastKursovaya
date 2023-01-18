@@ -7,6 +7,7 @@
 #include "MapCollision.h"
 #include "Weapon.h"
 #include "GetDegrees.h"
+#include "RadToDeg.h"
 
 Player::Player(float i_x, float i_y, float i_hp, Weapon& i_gun) : // Конструктор класса Player
 	direction_horizontal(0),
@@ -20,6 +21,8 @@ Player::Player(float i_x, float i_y, float i_hp, Weapon& i_gun) : // Конструктор
 {
 	map_player_texture.loadFromFile("Resources/Images/MapPlayer" + std::to_string(MAP_CELL_SIZE) + ".png"); // Загрузка текстуры из файла
 	wall_texture.loadFromFile("Resources/Images/Wall0" + std::to_string(CELL_SIZE) + ".png"); // Загрузка текстуры из файла
+	enemy_texture.loadFromFile("Resources/Images/Steven" + std::to_string(CELL_SIZE) + ".png");
+	enemy_sprite.setTexture(enemy_texture);
 }
 
 void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
@@ -52,9 +55,9 @@ void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
 	i_window.draw(map_player_sprite);
 }
 
-void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
+void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, const Enemy& enemy)
 {
-
+	bool draw_enemies = 0;
 	//Это расстояние, когда высота проекции и высота стены перед игроком равны
 	float projection_distance = 0.5f * CELL_SIZE / tan(deg_to_rad(0.5f * FOV_VERTICAL));
 	
@@ -62,7 +65,9 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 	float ray_start_x = x + 0.5f * CELL_SIZE;
 	float ray_start_y = y + 0.5f * CELL_SIZE;
 
-
+	float enemy_direction = get_degrees(rad_to_deg(atan2(ray_start_y - enemy.get_center_y(), enemy.get_center_x() - ray_start_x))) - direction_horizontal;
+	//My man Pythagoras is saving the day once again!
+	float enemy_distance = static_cast<float>(sqrt(pow(ray_start_x - enemy.get_center_x(), 2) + pow(ray_start_y - enemy.get_center_y(), 2)));
 
 	short previous_column = SHRT_MIN;
 
@@ -71,12 +76,22 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 	floor_shape.setPosition(0, floor_level);
 
 	
+	if (-180 >= enemy_direction)
+	{
+		enemy_direction += 360;
+	}
+	else if (180 < enemy_direction)
+	{
+		enemy_direction -= 360;
+	}
+
+	draw_enemies = RENDER_DISTANCE >= enemy_distance && enemy_direction <= 0.75f * FOV_HORIZONTAL && enemy_direction >= -0.75f * FOV_HORIZONTAL;
 
 	i_window.draw(floor_shape);
 
 	for (unsigned short rays = 0; rays < SCREEN_WIDTH; rays++)
 	{
-		if (true)
+		if (0 == (1 == draw_enemies && enemy_distance > view_rays[rays]))
 		{
 			float ray_direction = FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - rays) / (SCREEN_WIDTH - 1);
 			//Пересечение между лучом и проекцией
@@ -133,6 +148,82 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 				wall_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE)); // Scale спрайта
 				i_window.draw(wall_sprite); // Рисование спрайта
 				i_window.draw(shape); // Рисования "тумана"
+			}
+		}
+	}
+
+	if (1 == draw_enemies)
+	{
+		float frame_angle = 360.f * CELL_SIZE / enemy_texture.getSize().x;
+		//We're getting enemy's direction relative to ours.
+		float shifted_direction = get_degrees(enemy.get_direction() + 0.5f * (180 + frame_angle) - direction_horizontal - enemy_direction);
+		float enemy_projection_position = 0.5f * tan(deg_to_rad(enemy_direction)) / tan(deg_to_rad(0.5f * FOV_HORIZONTAL));
+
+		short enemy_screen_x = static_cast<short>(round(SCREEN_WIDTH * (0.5f - enemy_projection_position)));
+
+		unsigned short enemy_size = static_cast<unsigned short>(SCREEN_HEIGHT * projection_distance / (enemy_distance * cos(deg_to_rad(enemy_direction))));
+
+		previous_column = SHRT_MIN;
+
+		enemy_sprite.setColor(sf::Color(255, 255, 255, static_cast<unsigned char>(round(255 * std::min<float>(1, 2 * (1 - enemy_distance / RENDER_DISTANCE))))));
+		enemy_sprite.setPosition(round(enemy_screen_x - 0.5f * enemy_size), round(floor_level - 0.5f * enemy_size));
+		enemy_sprite.setScale(enemy_size / static_cast<float>(CELL_SIZE), enemy_size / static_cast<float>(CELL_SIZE));
+		enemy_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(CELL_SIZE * floor(shifted_direction / frame_angle)), 0, CELL_SIZE, CELL_SIZE));
+
+		i_window.draw(enemy_sprite);
+
+		for (unsigned short a = 0; a < SCREEN_WIDTH; a++)
+		{
+			//We're drawing columns that are closer than enemy.
+			if (enemy_distance > view_rays[a])
+			{
+				float ray_direction = FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - a) / (SCREEN_WIDTH - 1);
+				float ray_projection_position = 0.5f * tan(deg_to_rad(ray_direction)) / tan(deg_to_rad(0.5f * FOV_HORIZONTAL));
+
+				short current_column = static_cast<short>(round(SCREEN_WIDTH * (0.5f - ray_projection_position)));
+				short next_column = SCREEN_WIDTH;
+
+				if (a < SCREEN_WIDTH - 1)
+				{
+					float next_ray_direction = FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - 1 - a) / (SCREEN_WIDTH - 1);
+
+					ray_projection_position = 0.5f * tan(deg_to_rad(next_ray_direction)) / tan(deg_to_rad(0.5f * FOV_HORIZONTAL));
+
+					next_column = static_cast<short>(round(SCREEN_WIDTH * (0.5f - ray_projection_position)));
+				}
+
+				if (previous_column < current_column)
+				{
+					float ray_end_x = ray_start_x + view_rays[a] * cos(deg_to_rad(get_degrees(direction_horizontal + ray_direction)));
+					float ray_end_y = ray_start_y - view_rays[a] * sin(deg_to_rad(get_degrees(direction_horizontal + ray_direction)));
+					float wall_texture_column_x = 0;
+
+					unsigned char brightness = static_cast<unsigned char>(round(255 * std::max<float>(0, 2 * view_rays[a] / RENDER_DISTANCE - 1)));
+
+					unsigned short column_height = static_cast<unsigned short>(SCREEN_HEIGHT * projection_distance / (view_rays[a] * cos(deg_to_rad(ray_direction))));
+
+					sf::RectangleShape shape(sf::Vector2f(std::max(1, next_column - current_column), column_height));
+					shape.setFillColor(sf::Color(73, 255, 255, brightness));
+					shape.setPosition(current_column, round(floor_level - 0.5f * column_height));
+
+					previous_column = current_column;
+
+					if (abs(ray_end_x - CELL_SIZE * round(ray_end_x / CELL_SIZE)) < abs(ray_end_y - CELL_SIZE * round(ray_end_y / CELL_SIZE)))
+					{
+						wall_texture_column_x = ray_end_y - CELL_SIZE * floor(ray_end_y / CELL_SIZE);
+					}
+					else
+					{
+						wall_texture_column_x = CELL_SIZE * ceil(ray_end_x / CELL_SIZE) - ray_end_x;
+					}
+
+					wall_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height));
+					wall_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE));
+					wall_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE));
+
+					i_window.draw(wall_sprite);
+					i_window.draw(shape);
+				}
 			}
 		}
 	}
