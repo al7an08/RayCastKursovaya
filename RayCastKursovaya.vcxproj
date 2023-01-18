@@ -153,7 +153,6 @@
   <ItemGroup>
     <ClCompile Include="Boundary.cpp" />
     <ClCompile Include="ConvertSketch.cpp" />
-    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapCollision.cpp" />
     <ClCompile Include="Player.cpp" />
