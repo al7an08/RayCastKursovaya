@@ -4,8 +4,9 @@
 #include <algorithm>
 #include "Header.h"
 #include "Player.h"
-#include "DegToRad.h"
 #include "MapCollision.h"
+#include "Weapon.h"
+#include "GetDegrees.h"
 
 Player::Player(float i_x, float i_y, float i_hp, Weapon& i_gun) : // Конструктор класса Player
 	direction_horizontal(0),
@@ -194,7 +195,6 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 	// Выстрел из выбранного оружия
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		std::cout << "FIRE" << std::endl;
 		gun.fire();
 	}
 

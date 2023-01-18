@@ -1,7 +1,5 @@
 #include <array>
 #include <chrono>
-
-#include "Header.h"
 #include "MapCollision.h"
 
 // оллизи€, чтобы игрок не смог проходить через стены

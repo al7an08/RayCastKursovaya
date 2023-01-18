@@ -7,6 +7,8 @@ constexpr float MOVEMENT_SPEED = 2;
 //Число Пи
 constexpr float PI = 3.141592653589793116f;
 constexpr float RENDER_DISTANCE = 1024;
+
+//Скорость поворота противников
 constexpr float ENEMY_ROTATION_SPEED = 2;
 
 //Размер ячейки(клетки) в игре

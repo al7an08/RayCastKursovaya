@@ -1,4 +1,5 @@
 #include "ConvertSketch.h"
+#include "SFML/Graphics.hpp"
 #include <array>
 
 

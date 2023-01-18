@@ -1,9 +1,9 @@
 #pragma once
-#include <iostream>
-#include <SFML/Graphics.hpp>
 #include "Header.h"
-#include <array>
+#include "SFML/Graphics.hpp"
 #include "Weapon.h"
+#include "DegToRad.h"
+#include <array>
 
 class Player
 {

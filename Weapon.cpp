@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Weapon.h"
 #include "Header.h"
 
@@ -16,8 +17,10 @@ void Weapon::fire() {
 	if (ammo > 0) {
 		ammo--;
 		is_fire = true;
+		std::cout << "FIRE" << std::endl;
 	}
 	else {
+		std::cout << "No ammo left!" << std::endl;
 		is_fire = false;
 	}
 }
