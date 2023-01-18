@@ -7,7 +7,7 @@
 #include "DegToRad.h"
 #include "MapCollision.h"
 
-Player::Player(float i_x, float i_y, float i_hp, Weapon& i_gun) :
+Player::Player(float i_x, float i_y, float i_hp, Weapon& i_gun) : //  онструктор класса Player
 	direction_horizontal(0),
 	direction_vertical(0),
 	x(i_x),
@@ -17,8 +17,8 @@ Player::Player(float i_x, float i_y, float i_hp, Weapon& i_gun) :
 	map_player_sprite(map_player_texture),
 	wall_sprite(wall_texture)
 {
-	map_player_texture.loadFromFile("Resources/Images/MapPlayer" + std::to_string(MAP_CELL_SIZE) + ".png");
-	wall_texture.loadFromFile("Resources/Images/Wall0" + std::to_string(CELL_SIZE) + ".png");
+	map_player_texture.loadFromFile("Resources/Images/MapPlayer" + std::to_string(MAP_CELL_SIZE) + ".png"); // «агрузка текстуры из файла
+	wall_texture.loadFromFile("Resources/Images/Wall0" + std::to_string(CELL_SIZE) + ".png"); // «агрузка текстуры из файла
 }
 
 void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
@@ -56,14 +56,11 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 
 	//Ёто рассто€ние, когда высота проекции и высота стены перед игроком равны
 	float projection_distance = 0.5f * CELL_SIZE / tan(deg_to_rad(0.5f * FOV_VERTICAL));
-	//ѕол(floor).
+	
 	float floor_level = round(0.5f * SCREEN_HEIGHT * (1 + tan(deg_to_rad(direction_vertical)) / tan(deg_to_rad(0.5f * FOV_VERTICAL))));
 	float ray_start_x = x + 0.5f * CELL_SIZE;
 	float ray_start_y = y + 0.5f * CELL_SIZE;
 
-
-	unsigned char current_cell_x = static_cast<unsigned char>(floor(ray_start_x / CELL_SIZE));
-	unsigned char current_cell_y = static_cast<unsigned char>(floor(ray_start_y / CELL_SIZE));
 
 
 	short previous_column = SHRT_MIN;
@@ -128,21 +125,19 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 					wall_texture_column_x = CELL_SIZE * ceil(ray_end_x / CELL_SIZE) - ray_end_x;
 				}
 
-				unsigned char current_cell_x = static_cast<unsigned char>(floor(ray_end_x / CELL_SIZE));
-				unsigned char current_cell_y = static_cast<unsigned char>(floor(ray_end_y / CELL_SIZE));
 
 				
-				wall_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height));
-				wall_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE));
-				wall_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE));
-				i_window.draw(wall_sprite);
-				i_window.draw(shape);
+				wall_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height)); // ”казание координат дл€ отрисовки спрайта
+				wall_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE)); // “екстурирование спрайта
+				wall_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE)); // Scale спрайта
+				i_window.draw(wall_sprite); // –исование спрайта
+				i_window.draw(shape); // –исовани€ "тумана"
 			}
 		}
 	}
 }
 
-void Player::set_position(float i_x, float i_y)
+void Player::set_position(float i_x, float i_y) // ћетод выставл€ющий координаты игрока
 {
 	x = i_x;
 	y = i_y;
@@ -150,11 +145,14 @@ void Player::set_position(float i_x, float i_y)
 
 void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, const sf::RenderWindow& i_window)
 {
+	//ѕоворот по вертикали и горизонтали
 	float rotation_horizontal = 0;
 	float rotation_vertical = 0;
+	//»зменение координат игрока с последнего обновлени€
 	float step_x = 0;
 	float step_y = 0;
 
+	// абсолютные центра координаты окна
 	unsigned short window_center_x = static_cast<unsigned short>(round(0.5f * i_window.getSize().x));
 	unsigned short window_center_y = static_cast<unsigned short>(round(0.5f * i_window.getSize().y));
 
@@ -169,6 +167,8 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 	//„тобы управление мышью работало, даже если мышь будет выходить из окна
 	sf::Mouse::setPosition(sf::Vector2i(window_center_x, window_center_y), i_window);
 
+	//”правление игроком с помощью клавиатуры
+	//ѕри нажатии определенной клавиши определ€етс€ шаг на который должен сдвинутьс€ игрок по сравнению с последним обновлением
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		step_x = MOVEMENT_SPEED * cos(deg_to_rad(get_degrees(90 + direction_horizontal)));
@@ -190,12 +190,15 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 		step_x += MOVEMENT_SPEED * cos(deg_to_rad(direction_horizontal));
 		step_y -= MOVEMENT_SPEED * sin(deg_to_rad(direction_horizontal));
 	}
+
+	// ¬ыстрел из выбранного оружи€
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		std::cout << "FIRE" << std::endl;
-		// лева€ кнопка мыши нажата, стрел€ем!
 		gun.fire();
 	}
+
+	//ѕроверка на коллизию
 	if (0 == map_collision(step_x + x, step_y + y, i_map))
 	{
 		x += step_x;
@@ -226,7 +229,7 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 		float ray_direction = get_degrees(direction_horizontal + FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - a) / (SCREEN_WIDTH - 1));
 		float ray_direction_x = cos(deg_to_rad(ray_direction));
 		float ray_direction_y = -sin(deg_to_rad(ray_direction));
-		//This is the value we need.
+		
 		float ray_length = 0;
 		float ray_start_x = x + 0.5f * CELL_SIZE;
 		float ray_start_y = y + 0.5f * CELL_SIZE;
@@ -276,13 +279,13 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 			cell_step_y = 0;
 		}
 
-		//ћы продолжаем бросать лучи, пока он не достигнет ограничени€ по дистанции рендера
+		// ѕока длина луча не превысит дистанцию рендера
 		while (RENDER_DISTANCE >= ray_length)
 		{
 			//Ќа случай если луч попадет в угол
 			bool corner_collision = 0;
 
-			//”величиваем самый коротокий из лучей
+			//”величивание самого короткого из лучей
 			if (x_ray_length < y_ray_length)
 			{
 				ray_length = x_ray_length;
@@ -299,7 +302,7 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 			}
 			else
 			{
-				//≈сли лучи одинаковые по длине, что значит, что попали в угол, увеличваем оба луча
+				//≈сли лучи одинаковые по длине, что значит, что попали в угол, увеличание длины луча по x и y
 				corner_collision = 1;
 
 				ray_length = x_ray_length;
@@ -310,12 +313,12 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 				current_cell_y += cell_step_y;
 			}
 
-			//ѕровер€ем в пределах ли карты €чейка
+			//ѕроверка в пределах ли карты €чейка
 			if (0 <= current_cell_x && 0 <= current_cell_y && MAP_HEIGHT > current_cell_y && MAP_WIDTH > current_cell_x)
 			{
 				if (Cell::Empty != i_map[current_cell_x][current_cell_y])
 				{
-					//ѕерестайм бросать лучи, если попали в стену
+					//ѕри попадании в какой-то объект остановка бросани€ лучей
 					break;
 				}
 				else if (1 == corner_collision)
@@ -332,6 +335,6 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 		//ƒлина луча должна быть меньше, чем допустима€ дистанци€ рендера
 		ray_length = std::min(RENDER_DISTANCE, ray_length);
 
-		view_rays[a] = ray_length;
+		view_rays[a] = ray_length; // сохр€нение значени€ длины луча
 	}
 }
