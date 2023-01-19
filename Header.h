@@ -20,6 +20,8 @@ constexpr unsigned char MAP_HEIGHT = 24;
 constexpr unsigned char MAP_WIDTH = 40;
 constexpr unsigned char SCREEN_RESIZE = 1;
 
+constexpr unsigned char NUM_SPRITES = 2;
+
 constexpr unsigned short SCREEN_HEIGHT = 720;
 constexpr unsigned short SCREEN_WIDTH = 1280;
 

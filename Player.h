@@ -11,6 +11,8 @@ class Player
 private:
 	float direction_horizontal;
 	float direction_vertical;
+	double planeX = 0.0, planeY = 0.66;
+	double dirX = -1.0, dirY = 0.0;
 	float x;
 	float y;
 	float hp;
@@ -18,11 +20,16 @@ private:
 	std::array<float, SCREEN_WIDTH> view_rays;
 
 	sf::Sprite map_player_sprite;
-	sf::Sprite enemy_sprite;
-	sf::Sprite wall_sprite;
-
 	sf::Texture map_player_texture;
+
+	sf::Sprite wall_sprite;
 	sf::Texture wall_texture;
+
+
+	sf::Texture wall_texture1;
+	sf::Sprite wall_sprite1;
+
+	sf::Sprite enemy_sprite;
 	sf::Texture enemy_texture;
 public:
 	Player(float i_x, float i_y, float hp, Weapon& i_gun);
