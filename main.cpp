@@ -1,12 +1,10 @@
 #include <iostream>
 #include <array>
 #include <SFML/Graphics.hpp>
-#include "Boundary.h"
 #include "Header.h"
 #include "MapCollision.h"
 #include "Player.h"
 #include "ConvertSketch.h"
-#include "Weapon.h"
 
 int main()
 {
@@ -35,12 +33,9 @@ int main()
 	sf::Texture map_wall_texture;
 	map_wall_texture.loadFromFile("Resources/Images/MapWall" + std::to_string(MAP_CELL_SIZE) + ".png");
 
-	Weapon pistol(100, 10);
-	Enemy enemy(0, 0);
+	Player player(0, 0, 100);
 
-	Player player(0, 0, 100, pistol);
-
-	map = convert_sketch(player, enemy);
+	map = convert_sketch(player);
 
 	map_grid_cell_sprite.setTexture(map_grid_cell_texture);
 	map_grid_cell_sprite.setTextureRect(sf::IntRect(0, 0, MAP_GRID_CELL_SIZE, MAP_GRID_CELL_SIZE));
@@ -96,14 +91,12 @@ int main()
 
 			player.update(map, window);
 
-			enemy.update(map, window);
-
 			if (FRAME_DURATION > lag)
 			{
 				//ћен€ем цвет окна, рису€ таким образом небо
 				window.clear(sf::Color(73, 255, 255));
 
-				player.draw_screen(window, map, enemy);
+				player.draw_screen(window, map);
 
 				if (1 == draw_map)
 				{
@@ -135,9 +128,7 @@ int main()
 							}
 						}
 					}
-					pistol.draw(window);
 					player.draw_map(window);
-					enemy.draw_map(window);
 				}
 
 				window.display();

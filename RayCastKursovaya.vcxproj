@@ -151,28 +151,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Boundary.cpp" />
     <ClCompile Include="ConvertSketch.cpp" />
     <ClCompile Include="DegToRad.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="GetDegreescpp.cpp" />
+    <ClCompile Include="GetDegrees.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapCollision.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RadToDeg.cpp" />
-    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Boundary.h" />
     <ClInclude Include="ConvertSketch.h" />
     <ClInclude Include="DegToRad.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GetDegrees.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="MapCollision.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RadToDeg.h" />
-    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

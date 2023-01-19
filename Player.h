@@ -1,9 +1,7 @@
 #pragma once
 #include "Header.h"
 #include "SFML/Graphics.hpp"
-#include "Weapon.h"
 #include "DegToRad.h"
-#include "Enemy.h"
 #include <array>
 
 class Player
@@ -16,26 +14,22 @@ private:
 	float x;
 	float y;
 	float hp;
-	Weapon& gun;
 	std::array<float, SCREEN_WIDTH> view_rays;
 
 	sf::Sprite map_player_sprite;
 	sf::Texture map_player_texture;
 
-	sf::Sprite wall_sprite;
-	sf::Texture wall_texture;
-
-
-	sf::Texture wall_texture1;
-	sf::Sprite wall_sprite1;
+	std::array<sf::Texture, NUM_WALL_TYPES> wall_textures;
+	std::array<sf::Sprite, NUM_WALL_TYPES> wall_sprites;
+	
 
 	sf::Sprite enemy_sprite;
 	sf::Texture enemy_texture;
 public:
-	Player(float i_x, float i_y, float hp, Weapon& i_gun);
+	Player(float i_x, float i_y, float hp);
 
 	void draw_map(sf::RenderWindow& i_window);
-	void draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, const Enemy& enemy);
+	void draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map);
 	void set_position(float i_x, float i_y);
 	void update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, const sf::RenderWindow& i_window);
 };

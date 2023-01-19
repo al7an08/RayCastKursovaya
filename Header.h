@@ -16,11 +16,11 @@ constexpr unsigned char CELL_SIZE = 64;
 //Размер ячейки на миникарте
 constexpr unsigned char MAP_CELL_SIZE = 8;
 constexpr unsigned char MAP_GRID_CELL_SIZE = 16;
-constexpr unsigned char MAP_HEIGHT = 24;
-constexpr unsigned char MAP_WIDTH = 40;
+constexpr unsigned char MAP_HEIGHT = 32;
+constexpr unsigned char MAP_WIDTH = 32;
 constexpr unsigned char SCREEN_RESIZE = 1;
 
-constexpr unsigned char NUM_SPRITES = 2;
+constexpr unsigned char NUM_WALL_TYPES = 2;
 
 constexpr unsigned short SCREEN_HEIGHT = 720;
 constexpr unsigned short SCREEN_WIDTH = 1280;
@@ -33,5 +33,6 @@ enum Cell
 {
 	Empty,
 	Wall,
-	Wall1
+	Wall1,
+	Instruction
 };
