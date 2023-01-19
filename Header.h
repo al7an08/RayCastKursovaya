@@ -20,7 +20,7 @@ constexpr unsigned char MAP_HEIGHT = 32;
 constexpr unsigned char MAP_WIDTH = 32;
 constexpr unsigned char SCREEN_RESIZE = 1;
 
-constexpr unsigned char NUM_WALL_TYPES = 2;
+constexpr unsigned char NUM_WALL_TYPES = 4;
 
 constexpr unsigned short SCREEN_HEIGHT = 720;
 constexpr unsigned short SCREEN_WIDTH = 1280;
@@ -34,5 +34,6 @@ enum Cell
 	Empty,
 	Wall,
 	Wall1,
-	Instruction
+	Instruction,
+	Wall3
 };

@@ -249,23 +249,15 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 				wall_texture_column_x = CELL_SIZE * ceil(ray_end_x / CELL_SIZE) - ray_end_x;
 			}
 
-
-			if (Cell::Wall == i_map[current_cell_x][current_cell_y]) {
-				sf::Sprite temp_sprite;
-				temp_sprite.setTexture(wall_textures[Cell::Wall - 1]);
-				temp_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height)); // ”казание координат дл€ отрисовки спрайта
-				temp_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE)); // “екстурирование спрайта
-				temp_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE)); // Scale спрайта
-				i_window.draw(temp_sprite); // –исование спрайта
-			}
-
-			if (Cell::Wall1 == i_map[current_cell_x][current_cell_y]) {
-				sf::Sprite temp_sprite;
-				temp_sprite.setTexture(wall_textures[Cell::Wall1 - 1]);
-				temp_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height)); // ”казание координат дл€ отрисовки спрайта
-				temp_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE)); // “екстурирование спрайта
-				temp_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE)); // Scale спрайта
-				i_window.draw(temp_sprite); // –исование спрайта
+			for (int i = 1; i <= NUM_WALL_TYPES; i++) {
+				if (i == i_map[current_cell_x][current_cell_y]) {
+					sf::Sprite temp_sprite;
+					temp_sprite.setTexture(wall_textures[i - 1]);
+					temp_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height)); // ”казание координат дл€ отрисовки спрайта
+					temp_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE)); // “екстурирование спрайта
+					temp_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE)); // Scale спрайта
+					i_window.draw(temp_sprite); // –исование спрайта
+				}
 			}
 			i_window.draw(shape);// –исовани€ "тумана"
 		}
@@ -309,23 +301,11 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 	{
 		step_x = MOVEMENT_SPEED * cos(deg_to_rad(get_degrees(90 + direction_horizontal)));
 		step_y = -MOVEMENT_SPEED * sin(deg_to_rad(get_degrees(90 + direction_horizontal)));
-		double oldPlaneX = planeX;
-		double oldDirX = dirX;
-		dirX = dirX * cos(MOVEMENT_SPEED) - dirY * sin(MOVEMENT_SPEED);
-		dirY = oldDirX * sin(MOVEMENT_SPEED) + dirY * cos(MOVEMENT_SPEED);
-		planeX = planeX * cos(-MOVEMENT_SPEED) - planeY * sin(-MOVEMENT_SPEED);
-		planeY = oldPlaneX * sin(-MOVEMENT_SPEED) + planeY * cos(-MOVEMENT_SPEED);
 	}
 	else if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		step_x = MOVEMENT_SPEED * cos(deg_to_rad(get_degrees(direction_horizontal - 90)));
 		step_y = -MOVEMENT_SPEED * sin(deg_to_rad(get_degrees(direction_horizontal - 90)));
-		double oldPlaneX = planeX;
-		planeX = planeX * cos(-MOVEMENT_SPEED) - planeY * sin(-MOVEMENT_SPEED);
-		planeY = oldPlaneX * sin(-MOVEMENT_SPEED) + planeY * cos(-MOVEMENT_SPEED);
-		double oldDirX = dirX;
-		dirX = dirX * cos(-MOVEMENT_SPEED) - dirY * sin(-MOVEMENT_SPEED);
-		dirY = oldDirX * sin(-MOVEMENT_SPEED) + dirY * cos(-MOVEMENT_SPEED);
 	}
 
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -367,121 +347,4 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 		x = CELL_SIZE * round(x / CELL_SIZE);
 		y = CELL_SIZE * round(y / CELL_SIZE);
 	}
-
-	/*for (unsigned short a = 0; a < SCREEN_WIDTH; a++)
-	{
-		char cell_step_x = 0;
-		char cell_step_y = 0;
-
-		float ray_direction = get_degrees(direction_horizontal + FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - a) / (SCREEN_WIDTH - 1));
-		float ray_direction_x = cos(deg_to_rad(ray_direction));
-		float ray_direction_y = -sin(deg_to_rad(ray_direction));
-		
-		float ray_length = 0;
-		float ray_start_x = x + 0.5f * CELL_SIZE;
-		float ray_start_y = y + 0.5f * CELL_SIZE;
-		// этот луч провер€ет на коллизию по горизонтали
-		float x_ray_length = 0;
-		//Ётот луч провер€ет на коллизию по вертикали
-		float y_ray_length = 0;
-		//ƒлина луча, который движетс€ по одному юниту по координате X
-		float x_ray_unit_length = static_cast<float>(CELL_SIZE * sqrt(1 + pow(ray_direction_y / ray_direction_x, 2)));
-		//ƒлина луча, который движетс€ по одному юниту по координате Y
-		float y_ray_unit_length = static_cast<float>(CELL_SIZE * sqrt(1 + pow(ray_direction_x / ray_direction_y, 2)));
-
-		unsigned char current_cell_x = static_cast<unsigned char>(floor(ray_start_x / CELL_SIZE));
-		unsigned char current_cell_y = static_cast<unsigned char>(floor(ray_start_y / CELL_SIZE));
-
-		if (0 > ray_direction_x)
-		{
-			cell_step_x = -1;
-
-			x_ray_length = x_ray_unit_length * (ray_start_x / CELL_SIZE - current_cell_x);
-		}
-		else if (0 < ray_direction_x)
-		{
-			cell_step_x = 1;
-
-			x_ray_length = x_ray_unit_length * (1 + current_cell_x - ray_start_x / CELL_SIZE);
-		}
-		else
-		{
-			cell_step_x = 0;
-		}
-
-		if (0 > ray_direction_y)
-		{
-			cell_step_y = -1;
-
-			y_ray_length = y_ray_unit_length * (ray_start_y / CELL_SIZE - current_cell_y);
-		}
-		else if (0 < ray_direction_y)
-		{
-			cell_step_y = 1;
-
-			y_ray_length = y_ray_unit_length * (1 + current_cell_y - ray_start_y / CELL_SIZE);
-		}
-		else
-		{
-			cell_step_y = 0;
-		}
-
-		// ѕока длина луча не превысит дистанцию рендера
-		while (RENDER_DISTANCE >= ray_length)
-		{
-			//Ќа случай если луч попадет в угол
-			bool corner_collision = 0;
-
-			//”величивание самого короткого из лучей
-			if (x_ray_length < y_ray_length)
-			{
-				ray_length = x_ray_length;
-				x_ray_length += x_ray_unit_length;
-
-				current_cell_x += cell_step_x;
-			}
-			else if (x_ray_length > y_ray_length)
-			{
-				ray_length = y_ray_length;
-				y_ray_length += y_ray_unit_length;
-
-				current_cell_y += cell_step_y;
-			}
-			else
-			{
-				//≈сли лучи одинаковые по длине, что значит, что попали в угол, увеличание длины луча по x и y
-				corner_collision = 1;
-
-				ray_length = x_ray_length;
-				x_ray_length += x_ray_unit_length;
-				y_ray_length += y_ray_unit_length;
-
-				current_cell_x += cell_step_x;
-				current_cell_y += cell_step_y;
-			}
-
-			//ѕроверка в пределах ли карты €чейка
-			if (0 <= current_cell_x && 0 <= current_cell_y && MAP_HEIGHT > current_cell_y && MAP_WIDTH > current_cell_x)
-			{
-				if (Cell::Empty != i_map[current_cell_x][current_cell_y])
-				{
-					//ѕри попадании в какой-то объект остановка бросани€ лучей
-					break;
-				}
-				else if (1 == corner_collision)
-				{
-					//Ћуч не может пройти через 2 стены сто€щие диоганально
-					if (Cell::Empty != i_map[current_cell_x - cell_step_x][current_cell_y] && Cell::Empty != i_map[current_cell_x][current_cell_y - cell_step_y])
-					{
-						break;
-					}
-				}
-			}
-		}
-
-		//ƒлина луча должна быть меньше, чем допустима€ дистанци€ рендера
-		ray_length = std::min(RENDER_DISTANCE, ray_length);
-
-		view_rays[a] = ray_length; // сохр€нение значени€ длины луча
-	} */
 }

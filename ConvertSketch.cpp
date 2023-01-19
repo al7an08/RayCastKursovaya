@@ -9,7 +9,7 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(Player& i_pla
 	std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> output_map{};
 
 	sf::Image map_sketch;
-	map_sketch.loadFromFile("Resources/Images/map1.png");
+	map_sketch.loadFromFile("Resources/Images/map_final.png");
 
 	for (unsigned char a = 0; a < MAP_WIDTH; a++)
 	{
@@ -28,6 +28,14 @@ std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(Player& i_pla
 			else if (pixel == sf::Color(255, 0, 255))
 			{
 				output_map[a][b] = Cell::Wall1;
+			}
+			else if (pixel == sf::Color(255, 255, 255))
+			{
+				output_map[a][b] = Cell::Instruction;
+			}
+			else if (pixel == sf::Color(0, 255, 255))
+			{
+				output_map[a][b] = Cell::Wall3;
 			}
 			else 
 			{

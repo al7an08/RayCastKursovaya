@@ -114,7 +114,7 @@ int main()
 					{
 						for (unsigned short b = 0; b < MAP_HEIGHT; b++)
 						{
-							if (Cell::Wall == map[a][b])
+							if (Cell::Empty != map[a][b])
 							{
 								map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
 
