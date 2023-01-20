@@ -6,6 +6,12 @@
 #include "Player.h"
 #include "ConvertSketch.h"
 
+
+#pragma comment(lib, "sfml-graphics.lib")
+#pragma comment(lib, "sfml-window.lib")
+#pragma comment(lib, "sfml-system.lib")
+
+
 int main()
 {
 	//Значение от которого зависит, есть ли миникарта или нет
