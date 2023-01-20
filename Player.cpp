@@ -9,7 +9,7 @@
 #include "RadToDeg.h"
 #include <iostream>
 
-Player::Player(float i_x, float i_y, float i_hp) : // Конструктор класса Player
+Player::Player(float i_x, float i_y, float i_hp) : // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР° Player
 	direction_horizontal(0),
 	direction_vertical(0),
 	x(i_x),
@@ -17,7 +17,7 @@ Player::Player(float i_x, float i_y, float i_hp) : // Конструктор класса Player
 	hp(i_hp),
 	map_player_sprite(map_player_texture)
 {
-	map_player_texture.loadFromFile("Resources/Images/MapPlayer" + std::to_string(MAP_CELL_SIZE) + ".png"); // Загрузка текстуры из файла
+	map_player_texture.loadFromFile("Resources/Images/MapPlayer" + std::to_string(MAP_CELL_SIZE) + ".png"); // Р—Р°РіСЂСѓР·РєР° С‚РµРєСЃС‚СѓСЂС‹ РёР· С„Р°Р№Р»Р°
 
 	for (int i = 0; i < NUM_WALL_TYPES; i++) {
 		sf::Texture temp_texture;
@@ -32,17 +32,17 @@ Player::Player(float i_x, float i_y, float i_hp) : // Конструктор класса Player
 	enemy_sprite.setTexture(enemy_texture);
 }
 
-void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
+void Player::draw_map(sf::RenderWindow& i_window) // РѕС‚СЂРёСЃРѕРІРєР° РјРёРЅРёРєР°СЂС‚С‹
 {
-	//Определяем направление взгляда игрока
+	//РћРїСЂРµРґРµР»СЏРµРј РЅР°РїСЂР°РІР»РµРЅРёРµ РІР·РіР»СЏРґР° РёРіСЂРѕРєР°
 	float frame_angle = 360.f * MAP_CELL_SIZE / map_player_texture.getSize().x;
 	
 	float shifted_direction = get_degrees(direction_horizontal + 0.5f * frame_angle);
 	float start_x = x + 0.5f * CELL_SIZE;
 	float start_y = y + 0.5f * CELL_SIZE;
 
-	//Визуализация угла обзора
-	//Каждая из точек, в которой один из лучей пересекает какой-либо объект, является вершиной выпуклого многоугольника sf::TriangleFan 
+	//Р’РёР·СѓР°Р»РёР·Р°С†РёСЏ СѓРіР»Р° РѕР±Р·РѕСЂР°
+	//РљР°Р¶РґР°СЏ РёР· С‚РѕС‡РµРє, РІ РєРѕС‚РѕСЂРѕР№ РѕРґРёРЅ РёР· Р»СѓС‡РµР№ РїРµСЂРµСЃРµРєР°РµС‚ РєР°РєРѕР№-Р»РёР±Рѕ РѕР±СЉРµРєС‚, СЏРІР»СЏРµС‚СЃСЏ РІРµСЂС€РёРЅРѕР№ РІС‹РїСѓРєР»РѕРіРѕ РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРєР° sf::TriangleFan 
 	sf::VertexArray fov_visualization(sf::TriangleFan, 1 + SCREEN_WIDTH);
 	
 	fov_visualization[0].position = sf::Vector2f(MAP_CELL_SIZE * start_x / CELL_SIZE, MAP_CELL_SIZE * start_y / CELL_SIZE);
@@ -54,7 +54,7 @@ void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
 	{
 		float ray_direction = get_degrees(direction_horizontal + FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - 1 - a) / (SCREEN_WIDTH - 1));
 
-		// Находим точку, в которую упирается луч
+		// РќР°С…РѕРґРёРј С‚РѕС‡РєСѓ, РІ РєРѕС‚РѕСЂСѓСЋ СѓРїРёСЂР°РµС‚СЃСЏ Р»СѓС‡
 		fov_visualization[1 + a].position = sf::Vector2f(MAP_CELL_SIZE * (start_x + view_rays[a] * cos(deg_to_rad(ray_direction))) / CELL_SIZE, MAP_CELL_SIZE * (start_y - view_rays[a] * sin(deg_to_rad(ray_direction))) / CELL_SIZE);
 	}
 
@@ -65,7 +65,7 @@ void Player::draw_map(sf::RenderWindow& i_window) // отрисовка миникарты
 void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
 {
 	bool draw_enemies = 0;
-	//Это расстояние, когда высота проекции и высота стены перед игроком равны
+	//Р­С‚Рѕ СЂР°СЃСЃС‚РѕСЏРЅРёРµ, РєРѕРіРґР° РІС‹СЃРѕС‚Р° РїСЂРѕРµРєС†РёРё Рё РІС‹СЃРѕС‚Р° СЃС‚РµРЅС‹ РїРµСЂРµРґ РёРіСЂРѕРєРѕРј СЂР°РІРЅС‹
 	float projection_distance = 0.5f * CELL_SIZE / tan(deg_to_rad(0.5f * FOV_VERTICAL));
 	
 	float floor_level = round(0.5f * SCREEN_HEIGHT * (1 + tan(deg_to_rad(direction_vertical)) / tan(deg_to_rad(0.5f * FOV_VERTICAL))));
@@ -97,13 +97,13 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 		float ray_length = 0;
 		float ray_start_x = x + 0.5f * CELL_SIZE;
 		float ray_start_y = y + 0.5f * CELL_SIZE;
-		// этот луч проверяет на коллизию по горизонтали
+		// СЌС‚РѕС‚ Р»СѓС‡ РїСЂРѕРІРµСЂСЏРµС‚ РЅР° РєРѕР»Р»РёР·РёСЋ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё
 		float x_ray_length = 0;
-		//Этот луч проверяет на коллизию по вертикали
+		//Р­С‚РѕС‚ Р»СѓС‡ РїСЂРѕРІРµСЂСЏРµС‚ РЅР° РєРѕР»Р»РёР·РёСЋ РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 		float y_ray_length = 0;
-		//Длина луча, который движется по одному юниту по координате X
+		//Р”Р»РёРЅР° Р»СѓС‡Р°, РєРѕС‚РѕСЂС‹Р№ РґРІРёР¶РµС‚СЃСЏ РїРѕ РѕРґРЅРѕРјСѓ СЋРЅРёС‚Сѓ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Рµ X
 		float x_ray_unit_length = static_cast<float>(CELL_SIZE * sqrt(1 + pow(ray_direction_y / ray_direction_x, 2)));
-		//Длина луча, который движется по одному юниту по координате Y
+		//Р”Р»РёРЅР° Р»СѓС‡Р°, РєРѕС‚РѕСЂС‹Р№ РґРІРёР¶РµС‚СЃСЏ РїРѕ РѕРґРЅРѕРјСѓ СЋРЅРёС‚Сѓ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Рµ Y
 		float y_ray_unit_length = static_cast<float>(CELL_SIZE * sqrt(1 + pow(ray_direction_x / ray_direction_y, 2)));
 
 		unsigned char current_cell_x = static_cast<unsigned char>(floor(ray_start_x / CELL_SIZE));
@@ -143,13 +143,13 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 			cell_step_y = 0;
 		}
 
-		// Пока длина луча не превысит дистанцию рендера
+		// РџРѕРєР° РґР»РёРЅР° Р»СѓС‡Р° РЅРµ РїСЂРµРІС‹СЃРёС‚ РґРёСЃС‚Р°РЅС†РёСЋ СЂРµРЅРґРµСЂР°
 		while (RENDER_DISTANCE >= ray_length)
 		{
-			//На случай если луч попадет в угол
+			//РќР° СЃР»СѓС‡Р°Р№ РµСЃР»Рё Р»СѓС‡ РїРѕРїР°РґРµС‚ РІ СѓРіРѕР»
 			bool corner_collision = 0;
 
-			//Увеличивание самого короткого из лучей
+			//РЈРІРµР»РёС‡РёРІР°РЅРёРµ СЃР°РјРѕРіРѕ РєРѕСЂРѕС‚РєРѕРіРѕ РёР· Р»СѓС‡РµР№
 			if (x_ray_length < y_ray_length)
 			{
 				ray_length = x_ray_length;
@@ -166,7 +166,7 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 			}
 			else
 			{
-				//Если лучи одинаковые по длине, что значит, что попали в угол, увеличание длины луча по x и y
+				//Р•СЃР»Рё Р»СѓС‡Рё РѕРґРёРЅР°РєРѕРІС‹Рµ РїРѕ РґР»РёРЅРµ, С‡С‚Рѕ Р·РЅР°С‡РёС‚, С‡С‚Рѕ РїРѕРїР°Р»Рё РІ СѓРіРѕР», СѓРІРµР»РёС‡Р°РЅРёРµ РґР»РёРЅС‹ Р»СѓС‡Р° РїРѕ x Рё y
 				corner_collision = 1;
 
 				ray_length = x_ray_length;
@@ -177,17 +177,17 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 				current_cell_y += cell_step_y;
 			}
 
-			//Проверка в пределах ли карты ячейка
+			//РџСЂРѕРІРµСЂРєР° РІ РїСЂРµРґРµР»Р°С… Р»Рё РєР°СЂС‚С‹ СЏС‡РµР№РєР°
 			if (0 <= current_cell_x && 0 <= current_cell_y && MAP_HEIGHT > current_cell_y && MAP_WIDTH > current_cell_x)
 			{
 				if (Cell::Empty != i_map[current_cell_x][current_cell_y])
 				{
-					//При попадании в какой-то объект остановка бросания лучей
+					//РџСЂРё РїРѕРїР°РґР°РЅРёРё РІ РєР°РєРѕР№-С‚Рѕ РѕР±СЉРµРєС‚ РѕСЃС‚Р°РЅРѕРІРєР° Р±СЂРѕСЃР°РЅРёСЏ Р»СѓС‡РµР№
 					break;
 				}
 				else if (1 == corner_collision)
 				{
-					//Луч не может пройти через 2 стены стоящие диоганально
+					//Р›СѓС‡ РЅРµ РјРѕР¶РµС‚ РїСЂРѕР№С‚Рё С‡РµСЂРµР· 2 СЃС‚РµРЅС‹ СЃС‚РѕСЏС‰РёРµ РґРёРѕРіР°РЅР°Р»СЊРЅРѕ
 					if (Cell::Empty != i_map[current_cell_x - cell_step_x][current_cell_y] && Cell::Empty != i_map[current_cell_x][current_cell_y - cell_step_y])
 					{
 						break;
@@ -196,16 +196,16 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 			}
 		}
 
-		//Длина луча должна быть меньше, чем допустимая дистанция рендера
+		//Р”Р»РёРЅР° Р»СѓС‡Р° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РјРµРЅСЊС€Рµ, С‡РµРј РґРѕРїСѓСЃС‚РёРјР°СЏ РґРёСЃС‚Р°РЅС†РёСЏ СЂРµРЅРґРµСЂР°
 		ray_length = std::min(RENDER_DISTANCE, ray_length);
 
-		view_rays[rays] = ray_length; // сохрянение значения длины луча
+		view_rays[rays] = ray_length; // СЃРѕС…СЂСЏРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РґР»РёРЅС‹ Р»СѓС‡Р°
 
 		ray_direction = FOV_HORIZONTAL * (floor(0.5f * SCREEN_WIDTH) - rays) / (SCREEN_WIDTH - 1);
-		//Пересечение между лучом и проекцией
+		//РџРµСЂРµСЃРµС‡РµРЅРёРµ РјРµР¶РґСѓ Р»СѓС‡РѕРј Рё РїСЂРѕРµРєС†РёРµР№
 		float ray_projection_position = 0.5f * tan(deg_to_rad(ray_direction)) / tan(deg_to_rad(0.5f * FOV_HORIZONTAL));
 
-		//Положение текущей колонны на экране
+		//РџРѕР»РѕР¶РµРЅРёРµ С‚РµРєСѓС‰РµР№ РєРѕР»РѕРЅРЅС‹ РЅР° СЌРєСЂР°РЅРµ
 		short current_column = static_cast<short>(round(SCREEN_WIDTH * (0.5f - ray_projection_position)));
 		short next_column = SCREEN_WIDTH;
 
@@ -218,28 +218,28 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 			next_column = static_cast<short>(round(SCREEN_WIDTH * (0.5f - ray_projection_position)));
 		}
 
-		//Это предотвратит от рисования одной коллоны поверх другой
+		//Р­С‚Рѕ РїСЂРµРґРѕС‚РІСЂР°С‚РёС‚ РѕС‚ СЂРёСЃРѕРІР°РЅРёСЏ РѕРґРЅРѕР№ РєРѕР»Р»РѕРЅС‹ РїРѕРІРµСЂС… РґСЂСѓРіРѕР№
 		if (previous_column < current_column)
 		{
 			float ray_end_x = ray_start_x + view_rays[rays] * cos(deg_to_rad(get_degrees(direction_horizontal + ray_direction)));
 			float ray_end_y = ray_start_y - view_rays[rays] * sin(deg_to_rad(get_degrees(direction_horizontal + ray_direction)));
-			//Позиция текстуры стены, которую необходимо нарисовать
+			//РџРѕР·РёС†РёСЏ С‚РµРєСЃС‚СѓСЂС‹ СЃС‚РµРЅС‹, РєРѕС‚РѕСЂСѓСЋ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°СЂРёСЃРѕРІР°С‚СЊ
 			float wall_texture_column_x = 0;
 
-			//Эффект тумана не будет появляться если объект ближе RENDER_DISTANCE / 2
+			//Р­С„С„РµРєС‚ С‚СѓРјР°РЅР° РЅРµ Р±СѓРґРµС‚ РїРѕСЏРІР»СЏС‚СЊСЃСЏ РµСЃР»Рё РѕР±СЉРµРєС‚ Р±Р»РёР¶Рµ RENDER_DISTANCE / 2
 			unsigned char brightness = static_cast<unsigned char>(round(255 * std::max<float>(0, 2 * view_rays[rays] / RENDER_DISTANCE - 1)));
 
-			//Высота коллоны, умноженная на косинус чтобы предотвратить эффект рыбьего глаза
+			//Р’С‹СЃРѕС‚Р° РєРѕР»Р»РѕРЅС‹, СѓРјРЅРѕР¶РµРЅРЅР°СЏ РЅР° РєРѕСЃРёРЅСѓСЃ С‡С‚РѕР±С‹ РїСЂРµРґРѕС‚РІСЂР°С‚РёС‚СЊ СЌС„С„РµРєС‚ СЂС‹Р±СЊРµРіРѕ РіР»Р°Р·Р°
 			unsigned short column_height = static_cast<unsigned short>(SCREEN_HEIGHT * projection_distance / (view_rays[rays] * cos(deg_to_rad(ray_direction))));
 
-			//Цвет "тумана" такой же как у неба
+			//Р¦РІРµС‚ "С‚СѓРјР°РЅР°" С‚Р°РєРѕР№ Р¶Рµ РєР°Рє Сѓ РЅРµР±Р°
 			sf::RectangleShape shape(sf::Vector2f(std::max(1, next_column - current_column), column_height));
 			shape.setFillColor(sf::Color(73, 255, 255, brightness));
 			shape.setPosition(current_column, round(floor_level - 0.5f * column_height));
 
 			previous_column = current_column;
 
-			//Проверяем в какую часть стены коснулся луч, в вертикальную или горизонтальную
+			//РџСЂРѕРІРµСЂСЏРµРј РІ РєР°РєСѓСЋ С‡Р°СЃС‚СЊ СЃС‚РµРЅС‹ РєРѕСЃРЅСѓР»СЃСЏ Р»СѓС‡, РІ РІРµСЂС‚РёРєР°Р»СЊРЅСѓСЋ РёР»Рё РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅСѓСЋ
 			if (abs(ray_end_x - CELL_SIZE * round(ray_end_x / CELL_SIZE)) < abs(ray_end_y - CELL_SIZE * round(ray_end_y / CELL_SIZE)))
 			{
 				wall_texture_column_x = ray_end_y - CELL_SIZE * floor(ray_end_y / CELL_SIZE);
@@ -253,19 +253,19 @@ void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array
 				if (i == i_map[current_cell_x][current_cell_y]) {
 					sf::Sprite temp_sprite;
 					temp_sprite.setTexture(wall_textures[i - 1]);
-					temp_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height)); // Указание координат для отрисовки спрайта
-					temp_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE)); // Текстурирование спрайта
-					temp_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE)); // Scale спрайта
-					i_window.draw(temp_sprite); // Рисование спрайта
+					temp_sprite.setPosition(current_column, round(floor_level - 0.5f * column_height)); // РЈРєР°Р·Р°РЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚ РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё СЃРїСЂР°Р№С‚Р°
+					temp_sprite.setTextureRect(sf::IntRect(static_cast<unsigned short>(round(wall_texture_column_x)), 0, 1, CELL_SIZE)); // РўРµРєСЃС‚СѓСЂРёСЂРѕРІР°РЅРёРµ СЃРїСЂР°Р№С‚Р°
+					temp_sprite.setScale(std::max(1, next_column - current_column), column_height / static_cast<float>(CELL_SIZE)); // Scale СЃРїСЂР°Р№С‚Р°
+					i_window.draw(temp_sprite); // Р РёСЃРѕРІР°РЅРёРµ СЃРїСЂР°Р№С‚Р°
 				}
 			}
-			i_window.draw(shape);// Рисования "тумана"
+			i_window.draw(shape);// Р РёСЃРѕРІР°РЅРёСЏ "С‚СѓРјР°РЅР°"
 		}
 
 	}
 }
 
-void Player::set_position(float i_x, float i_y) // Метод выставляющий координаты игрока
+void Player::set_position(float i_x, float i_y) // РњРµС‚РѕРґ РІС‹СЃС‚Р°РІР»СЏСЋС‰РёР№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РёРіСЂРѕРєР°
 {
 	x = i_x;
 	y = i_y;
@@ -273,30 +273,30 @@ void Player::set_position(float i_x, float i_y) // Метод выставляющий координаты
 
 void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, const sf::RenderWindow& i_window)
 {
-	//Поворот по вертикали и горизонтали
+	//РџРѕРІРѕСЂРѕС‚ РїРѕ РІРµСЂС‚РёРєР°Р»Рё Рё РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё
 	float rotation_horizontal = 0;
 	float rotation_vertical = 0;
-	//Изменение координат игрока с последнего обновления
+	//РР·РјРµРЅРµРЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚ РёРіСЂРѕРєР° СЃ РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ
 	float step_x = 0;
 	float step_y = 0;
 
-	// абсолютные центра координаты окна
+	// Р°Р±СЃРѕР»СЋС‚РЅС‹Рµ С†РµРЅС‚СЂР° РєРѕРѕСЂРґРёРЅР°С‚С‹ РѕРєРЅР°
 	unsigned short window_center_x = static_cast<unsigned short>(round(0.5f * i_window.getSize().x));
 	unsigned short window_center_y = static_cast<unsigned short>(round(0.5f * i_window.getSize().y));
 
-	//Управление камеры с помощью мыши
+	//РЈРїСЂР°РІР»РµРЅРёРµ РєР°РјРµСЂС‹ СЃ РїРѕРјРѕС‰СЊСЋ РјС‹С€Рё
 	rotation_horizontal = FOV_HORIZONTAL * (window_center_x - sf::Mouse::getPosition(i_window).x) / i_window.getSize().x;
 	rotation_vertical = FOV_VERTICAL * (window_center_y - sf::Mouse::getPosition(i_window).y) / i_window.getSize().y;
 
 	direction_horizontal = get_degrees(direction_horizontal + rotation_horizontal);
-	//направление взгляда по вертикали
+	//РЅР°РїСЂР°РІР»РµРЅРёРµ РІР·РіР»СЏРґР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 	direction_vertical = std::max(-89.f, std::min(direction_vertical + rotation_vertical, 89.f)); 
 
-	//Чтобы управление мышью работало, даже если мышь будет выходить из окна
+	//Р§С‚РѕР±С‹ СѓРїСЂР°РІР»РµРЅРёРµ РјС‹С€СЊСЋ СЂР°Р±РѕС‚Р°Р»Рѕ, РґР°Р¶Рµ РµСЃР»Рё РјС‹С€СЊ Р±СѓРґРµС‚ РІС‹С…РѕРґРёС‚СЊ РёР· РѕРєРЅР°
 	sf::Mouse::setPosition(sf::Vector2i(window_center_x, window_center_y), i_window);
 
-	//Управление игроком с помощью клавиатуры
-	//При нажатии определенной клавиши определяется шаг на который должен сдвинуться игрок по сравнению с последним обновлением
+	//РЈРїСЂР°РІР»РµРЅРёРµ РёРіСЂРѕРєРѕРј СЃ РїРѕРјРѕС‰СЊСЋ РєР»Р°РІРёР°С‚СѓСЂС‹
+	//РџСЂРё РЅР°Р¶Р°С‚РёРё РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РєР»Р°РІРёС€Рё РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ С€Р°Рі РЅР° РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РµРЅ СЃРґРІРёРЅСѓС‚СЊСЃСЏ РёРіСЂРѕРє РїРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ РїРѕСЃР»РµРґРЅРёРј РѕР±РЅРѕРІР»РµРЅРёРµРј
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		step_x = MOVEMENT_SPEED * cos(deg_to_rad(get_degrees(90 + direction_horizontal)));
@@ -319,13 +319,13 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 		step_y -= MOVEMENT_SPEED * sin(deg_to_rad(direction_horizontal));
 	}
 
-	// Выстрел из выбранного оружия
+	// Р’С‹СЃС‚СЂРµР» РёР· РІС‹Р±СЂР°РЅРЅРѕРіРѕ РѕСЂСѓР¶РёСЏ
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		/*gun.fire();*/
 	}
 
-	//Проверка на коллизию
+	//РџСЂРѕРІРµСЂРєР° РЅР° РєРѕР»Р»РёР·РёСЋ
 	if (0 == map_collision(step_x + x, step_y + y, i_map))
 	{
 		x += step_x;
@@ -343,7 +343,7 @@ void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i
 	}
 	else
 	{
-		//Располагаем игрока на ближайшей ячейке, чтобы он её касался
+		//Р Р°СЃРїРѕР»Р°РіР°РµРј РёРіСЂРѕРєР° РЅР° Р±Р»РёР¶Р°Р№С€РµР№ СЏС‡РµР№РєРµ, С‡С‚РѕР±С‹ РѕРЅ РµС‘ РєР°СЃР°Р»СЃСЏ
 		x = CELL_SIZE * round(x / CELL_SIZE);
 		y = CELL_SIZE * round(y / CELL_SIZE);
 	}
