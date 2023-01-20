@@ -8,16 +8,16 @@
 
 int main()
 {
-	//Значение от которого зависит, есть ли миникарта или нет
+	//Р—РЅР°С‡РµРЅРёРµ РѕС‚ РєРѕС‚РѕСЂРѕРіРѕ Р·Р°РІРёСЃРёС‚, РµСЃС‚СЊ Р»Рё РјРёРЅРёРєР°СЂС‚Р° РёР»Рё РЅРµС‚
 	bool draw_map = 1;
 
 	std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map{};
 
-	//Это переменная нужна, чтобы избавиться от зависимости от количества кадров в секунду
+	//Р­С‚Рѕ РїРµСЂРµРјРµРЅРЅР°СЏ РЅСѓР¶РЅР°, С‡С‚РѕР±С‹ РёР·Р±Р°РІРёС‚СЊСЃСЏ РѕС‚ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РєРѕР»РёС‡РµСЃС‚РІР° РєР°РґСЂРѕРІ РІ СЃРµРєСѓРЅРґСѓ
 	std::chrono::microseconds lag(0);
 
 	std::chrono::steady_clock::time_point previous_time;
-	//Экземпляр класса Event
+	//Р­РєР·РµРјРїР»СЏСЂ РєР»Р°СЃСЃР° Event
 	sf::Event event;
 
 	sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "RayCaster", sf::Style::Close);
@@ -93,7 +93,7 @@ int main()
 
 			if (FRAME_DURATION > lag)
 			{
-				//Меняем цвет окна, рисуя таким образом небо
+				//РњРµРЅСЏРµРј С†РІРµС‚ РѕРєРЅР°, СЂРёСЃСѓСЏ С‚Р°РєРёРј РѕР±СЂР°Р·РѕРј РЅРµР±Рѕ
 				window.clear(sf::Color(73, 255, 255));
 
 				player.draw_screen(window, map);

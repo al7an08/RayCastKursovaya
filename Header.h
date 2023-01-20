@@ -4,16 +4,16 @@
 constexpr float FOV_HORIZONTAL = 90;
 constexpr float FOV_VERTICAL = 58.75f;
 constexpr float MOVEMENT_SPEED = 2;
-//Число Пи
+//Р§РёСЃР»Рѕ РџРё
 constexpr float PI = 3.141592653589793116f;
 constexpr float RENDER_DISTANCE = 1024;
 
-//Скорость поворота противников
+//РЎРєРѕСЂРѕСЃС‚СЊ РїРѕРІРѕСЂРѕС‚Р° РїСЂРѕС‚РёРІРЅРёРєРѕРІ
 constexpr float ENEMY_ROTATION_SPEED = 2;
 
-//Размер ячейки(клетки) в игре
+//Р Р°Р·РјРµСЂ СЏС‡РµР№РєРё(РєР»РµС‚РєРё) РІ РёРіСЂРµ
 constexpr unsigned char CELL_SIZE = 64;
-//Размер ячейки на миникарте
+//Р Р°Р·РјРµСЂ СЏС‡РµР№РєРё РЅР° РјРёРЅРёРєР°СЂС‚Рµ
 constexpr unsigned char MAP_CELL_SIZE = 8;
 constexpr unsigned char MAP_GRID_CELL_SIZE = 16;
 constexpr unsigned char MAP_HEIGHT = 32;
@@ -25,10 +25,10 @@ constexpr unsigned char NUM_WALL_TYPES = 4;
 constexpr unsigned short SCREEN_HEIGHT = 720;
 constexpr unsigned short SCREEN_WIDTH = 1280;
 
-//Если у нас 60 кадров в 1 секунде, то каждый кадр будет длится 16.667 мс
+//Р•СЃР»Рё Сѓ РЅР°СЃ 60 РєР°РґСЂРѕРІ РІ 1 СЃРµРєСѓРЅРґРµ, С‚Рѕ РєР°Р¶РґС‹Р№ РєР°РґСЂ Р±СѓРґРµС‚ РґР»РёС‚СЃСЏ 16.667 РјСЃ
 constexpr std::chrono::microseconds FRAME_DURATION(16667);
 
-//Типы ячееек
+//РўРёРїС‹ СЏС‡РµРµРµРє
 enum Cell
 {
 	Empty,

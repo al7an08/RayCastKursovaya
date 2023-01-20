@@ -5,7 +5,6 @@
 
 float deg_to_rad(float i_degrees)
 {
-	//After googling I found out that smart people use radians because of calculus.
-	//I don't know what that word means so I'll keep using degrees.
+	//Функция, которая получает на вход градусы и переводит их в радианы
 	return PI * i_degrees / 180;
 }

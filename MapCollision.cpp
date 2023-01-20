@@ -2,11 +2,11 @@
 #include <chrono>
 #include "MapCollision.h"
 
-//Коллизия, чтобы игрок не смог проходить через стены
+//РљРѕР»Р»РёР·РёСЏ, С‡С‚РѕР±С‹ РёРіСЂРѕРє РЅРµ СЃРјРѕРі РїСЂРѕС…РѕРґРёС‚СЊ С‡РµСЂРµР· СЃС‚РµРЅС‹
 bool map_collision(float i_x, float i_y, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
 {
-	float cell_x = i_x / CELL_SIZE; // координата x в позиции в ячейке
-	float cell_y = i_y / CELL_SIZE; // координата y в позиции в ячейке
+	float cell_x = i_x / CELL_SIZE; // РєРѕРѕСЂРґРёРЅР°С‚Р° x РІ РїРѕР·РёС†РёРё РІ СЏС‡РµР№РєРµ
+	float cell_y = i_y / CELL_SIZE; // РєРѕРѕСЂРґРёРЅР°С‚Р° y РІ РїРѕР·РёС†РёРё РІ СЏС‡РµР№РєРµ
 
 	for (unsigned char a = 0; a < 4; a++)
 	{
