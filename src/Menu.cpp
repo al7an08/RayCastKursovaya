@@ -10,9 +10,9 @@ Menu::Menu() {
 
 void Menu::DrawMenu(sf::RenderWindow& i_window) {
 	sf::Sprite menu1(Texture_Button1), menu2(Texture_Button2), menu3(Texture_Button3), about(Texture_Button1);
-	/*menu1.scale(5.f, 5.f);
-	menu2.scale(5.f, 5.f);
-	menu3.scale(5.f, 5.f);*/
+	menu1.scale(SCREEN_RESIZE, SCREEN_RESIZE);
+	menu2.scale(SCREEN_RESIZE, SCREEN_RESIZE);
+	menu3.scale(SCREEN_RESIZE, SCREEN_RESIZE);
 	int menuNum = 0;
 	menu1.setPosition(- menu1.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, SCREEN_HEIGHT / 5);
 	menu2.setPosition(- menu2.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 2 * SCREEN_HEIGHT / 5);
