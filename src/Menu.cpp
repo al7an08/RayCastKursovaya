@@ -1,6 +1,6 @@
 #include "Menu.h"
 #include "Header.h"
-
+int SCREEN_RESIZE = 1;
 Menu::Menu() {
 	isMenu = 1;
 	for (int i = 0; i < BUTTON_NUM; i++) {
@@ -71,26 +71,26 @@ void Menu::DrawMenu(sf::RenderWindow& i_window) {
 	if (menuMode == 2) {
 		int optionNum = 0;
 		sf::Sprite menu1(Buttons_Texture[3]), menu2(Buttons_Texture[4]), menu3(Buttons_Texture[5]), menu4(Buttons_Texture[6]);
-		menu1.scale(SCREEN_RESIZE, SCREEN_RESIZE);
-		menu2.scale(SCREEN_RESIZE, SCREEN_RESIZE);
-		menu3.scale(SCREEN_RESIZE, SCREEN_RESIZE);
-		menu4.scale(SCREEN_RESIZE, SCREEN_RESIZE);
-		menu1.setPosition(-menu1.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 0);
-		menu2.setPosition(-menu2.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 1 * SCREEN_HEIGHT / 4);
-		menu3.setPosition(-menu3.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 2 * SCREEN_HEIGHT / 4);
-		menu4.setPosition(-menu4.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 3 * SCREEN_HEIGHT / 4);
+		/*menu1.scale(1 / SCREEN_RESIZE, 1 / SCREEN_RESIZE);
+		menu2.scale(1 / SCREEN_RESIZE, 1 / SCREEN_RESIZE);
+		menu3.scale(1 / SCREEN_RESIZE, 1 / SCREEN_RESIZE);
+		menu4.scale(1 / SCREEN_RESIZE, 1 / SCREEN_RESIZE);*/
+		menu1.setPosition(-menu1.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 0);
+		menu2.setPosition(-menu2.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 1 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4);
+		menu3.setPosition(-menu3.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 2 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4);
+		menu4.setPosition(-menu4.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 3 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4);
 		optionNum = 0;
-		if (sf::IntRect(-menu2.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 1 * SCREEN_HEIGHT / 4, +menu2.getGlobalBounds().width, menu2.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
+		if (sf::IntRect(-menu2.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 1 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4 , +menu2.getGlobalBounds().width, menu2.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
 		{
 			menu2.setColor(sf::Color::Blue);
 			optionNum = 1;
 		}
-		if (sf::IntRect(-menu3.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 2 * SCREEN_HEIGHT / 4, +menu3.getGlobalBounds().width, menu3.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
+		if (sf::IntRect(-menu3.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 2 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4, +menu3.getGlobalBounds().width, menu3.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
 		{
 			menu3.setColor(sf::Color::Blue);
 			optionNum = 2;
 		}
-		if (sf::IntRect(-menu4.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 3 * SCREEN_HEIGHT / 4, +menu4.getGlobalBounds().width, menu4.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
+		if (sf::IntRect(-menu4.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 3 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4, +menu4.getGlobalBounds().width, menu4.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
 		{
 			menu4.setColor(sf::Color::Blue);
 			optionNum = 3;
@@ -103,14 +103,18 @@ void Menu::DrawMenu(sf::RenderWindow& i_window) {
 			}
 			if (optionNum == 1) 
 			{
-				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+				SCREEN_RESIZE = 2;
+				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / SCREEN_RESIZE, SCREEN_HEIGHT / SCREEN_RESIZE ));
+
 			}
 			if (optionNum == 2) {
+				SCREEN_RESIZE = 1.5f;
 				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / 1.5, SCREEN_HEIGHT / 1.5));
 			}
 			if (optionNum == 3)
 			{
-				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / 1, SCREEN_HEIGHT / 1));
+				SCREEN_RESIZE = 1;
+				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / SCREEN_RESIZE, SCREEN_HEIGHT / SCREEN_RESIZE));
 			}
 
 		}

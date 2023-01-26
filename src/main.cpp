@@ -29,7 +29,7 @@ int main()
 
 
 	Menu menu;
-	sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "RayCaster", sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(1 * SCREEN_WIDTH, 1 * SCREEN_HEIGHT), "RayCaster", sf::Style::Close);
 	window.setMouseCursorVisible(0);
 	window.setView(sf::View(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)));
 

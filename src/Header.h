@@ -19,7 +19,9 @@ constexpr unsigned char MAP_CELL_SIZE = 8;
 constexpr unsigned char MAP_GRID_CELL_SIZE = 16;
 constexpr unsigned char MAP_HEIGHT = 32;
 constexpr unsigned char MAP_WIDTH = 32;
-constexpr unsigned char SCREEN_RESIZE = 1;
+
+
+//extern unsigned char SCREEN_RESIZE = 1;
 
 constexpr unsigned char NUM_WALL_TYPES = 4;
 
