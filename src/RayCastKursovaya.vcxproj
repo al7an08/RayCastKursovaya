@@ -156,6 +156,7 @@
     <ClCompile Include="GetDegrees.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapCollision.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RadToDeg.cpp" />
   </ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="GetDegrees.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="MapCollision.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RadToDeg.h" />
   </ItemGroup>

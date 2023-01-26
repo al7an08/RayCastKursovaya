@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 
+
 constexpr float FOV_HORIZONTAL = 90;
 constexpr float FOV_VERTICAL = 58.75f;
 constexpr float MOVEMENT_SPEED = 2;
@@ -24,6 +25,8 @@ constexpr unsigned char NUM_WALL_TYPES = 4;
 
 constexpr unsigned short SCREEN_HEIGHT = 720;
 constexpr unsigned short SCREEN_WIDTH = 1280;
+
+
 
 //Если у нас 60 кадров в 1 секунде, то каждый кадр будет длится 16.667 мс
 constexpr std::chrono::microseconds FRAME_DURATION(16667);

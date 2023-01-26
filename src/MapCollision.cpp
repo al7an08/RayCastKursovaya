@@ -53,6 +53,15 @@ bool map_collision(float i_x, float i_y, const std::array<std::array<Cell, MAP_H
 			{
 				return 1;
 			}
+			if (Cell::Wall3 == i_map[x][y])
+			{
+				return 1;
+			}
+			if (Cell::Instruction == i_map[x][y])
+			{
+				return 1;
+			}
+
 		}
 	}
 

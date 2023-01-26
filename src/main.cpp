@@ -5,11 +5,12 @@
 #include "MapCollision.h"
 #include "Player.h"
 #include "ConvertSketch.h"
+#include "Menu.h"
+#include "SFML/Graphics.hpp"
 
-
-#pragma comment(lib, "sfml-graphics.lib")
-#pragma comment(lib, "sfml-window.lib")
-#pragma comment(lib, "sfml-system.lib")
+//#pragma comment(lib, "sfml-graphics.lib")
+//#pragma comment(lib, "sfml-window.lib")
+//#pragma comment(lib, "sfml-system.lib")
 
 
 int main()
@@ -26,6 +27,8 @@ int main()
 	//Экземпляр класса Event
 	sf::Event event;
 
+
+	Menu menu;
 	sf::RenderWindow window(sf::VideoMode(SCREEN_RESIZE * SCREEN_WIDTH, SCREEN_RESIZE * SCREEN_HEIGHT), "RayCaster", sf::Style::Close);
 	window.setMouseCursorVisible(0);
 	window.setView(sf::View(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)));
@@ -57,87 +60,101 @@ int main()
 
 		previous_time += delta_time;
 
-		while (FRAME_DURATION <= lag)
+		while (1 == window.pollEvent(event))
 		{
-			lag -= FRAME_DURATION;
-
-			while (1 == window.pollEvent(event))
+			switch (event.type)
 			{
-				switch (event.type)
+			case sf::Event::Closed:
+			{
+				window.close();
+
+				break;
+			}
+			case sf::Event::KeyPressed:
+			{
+				switch (event.key.code)
 				{
-				case sf::Event::Closed:
+				case sf::Keyboard::H:
+				{
+					if (draw_map == 1) {
+						draw_map = 0;
+					}
+					else {
+						draw_map = 1;
+					}
+				}
+				case sf::Keyboard::Z:
 				{
 					window.close();
 
 					break;
 				}
-				case sf::Event::KeyPressed:
+				case sf::Keyboard::Escape:
 				{
-					switch (event.key.code)
-					{
-					case sf::Keyboard::H:
-					{
-						if (draw_map == 1) {
-							draw_map = 0;
-						}
-						else {
-							draw_map = 1;
-						}
-					}
-					case sf::Keyboard::Escape:
-					{
-						window.close();
+					menu.SetIsOpen();
 
-						break;
-					}
-					}
+					break;
 				}
 				}
 			}
+			}
+		}
 
-			player.update(map, window);
+		if (menu.IsOpen()) {
+			window.clear(sf::Color(73, 255, 255));
+			window.setMouseCursorVisible(true);
+			menu.DrawMenu(window);
+		}
+		else {
 
-			if (FRAME_DURATION > lag)
+			while (FRAME_DURATION <= lag)
 			{
-				//Меняем цвет окна, рисуя таким образом небо
-				window.clear(sf::Color(73, 255, 255));
+				lag -= FRAME_DURATION;
 
-				player.draw_screen(window, map);
+				player.update(map, window);
 
-				if (1 == draw_map)
+				if (FRAME_DURATION > lag)
 				{
-					for (unsigned short a = 0; a < ceil(MAP_CELL_SIZE * MAP_WIDTH / static_cast<float>(MAP_GRID_CELL_SIZE)); a++)
+					//Меняем цвет окна, рисуя таким образом небо
+					window.clear(sf::Color(73, 255, 255));
+
+					player.draw_screen(window, map);
+
+					if (1 == draw_map)
 					{
-						for (unsigned short b = 0; b < ceil(MAP_CELL_SIZE * MAP_HEIGHT / static_cast<float>(MAP_GRID_CELL_SIZE)); b++)
+						for (unsigned short a = 0; a < ceil(MAP_CELL_SIZE * MAP_WIDTH / static_cast<float>(MAP_GRID_CELL_SIZE)); a++)
 						{
-							map_grid_cell_sprite.setPosition(static_cast<float>(MAP_GRID_CELL_SIZE * a), static_cast<float>(MAP_GRID_CELL_SIZE * b));
-
-							window.draw(map_grid_cell_sprite);
-						}
-					}
-
-					for (unsigned short a = 0; a < MAP_WIDTH; a++)
-					{
-						for (unsigned short b = 0; b < MAP_HEIGHT; b++)
-						{
-							if (Cell::Empty != map[a][b])
+							for (unsigned short b = 0; b < ceil(MAP_CELL_SIZE * MAP_HEIGHT / static_cast<float>(MAP_GRID_CELL_SIZE)); b++)
 							{
-								map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
+								map_grid_cell_sprite.setPosition(static_cast<float>(MAP_GRID_CELL_SIZE * a), static_cast<float>(MAP_GRID_CELL_SIZE * b));
 
-								window.draw(map_wall_sprite);
-							}
-							else if (Cell::Wall1 == map[a][b]) 
-							{
-								map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
-
-								window.draw(map_wall_sprite);
+								window.draw(map_grid_cell_sprite);
 							}
 						}
+
+						for (unsigned short a = 0; a < MAP_WIDTH; a++)
+						{
+							for (unsigned short b = 0; b < MAP_HEIGHT; b++)
+							{
+								if (Cell::Empty != map[a][b])
+								{
+									map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
+
+									window.draw(map_wall_sprite);
+								}
+								else if (Cell::Wall1 == map[a][b])
+								{
+									map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
+
+									window.draw(map_wall_sprite);
+								}
+							}
+						}
+						player.draw_map(window);
 					}
-					player.draw_map(window);
+
+					window.display();
 				}
-
-				window.display();
 			}
 		}
 	}
