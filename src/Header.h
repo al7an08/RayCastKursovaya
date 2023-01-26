@@ -23,9 +23,11 @@ constexpr unsigned char SCREEN_RESIZE = 1;
 
 constexpr unsigned char NUM_WALL_TYPES = 4;
 
-constexpr unsigned short SCREEN_HEIGHT = 720;
-constexpr unsigned short SCREEN_WIDTH = 1280;
+constexpr unsigned short SCREEN_HEIGHT = 1080;
+constexpr unsigned short SCREEN_WIDTH = 1920;
 
+
+constexpr unsigned char BUTTON_NUM = 8;
 
 
 //Если у нас 60 кадров в 1 секунде, то каждый кадр будет длится 16.667 мс

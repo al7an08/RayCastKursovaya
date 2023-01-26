@@ -3,15 +3,18 @@
 
 Menu::Menu() {
 	isMenu = 1;
-	Texture_Button1.loadFromFile("Resources/Textures/Button1.png");
-	Texture_Button2.loadFromFile("Resources/Textures/Button2.png");
-	Texture_Button3.loadFromFile("Resources/Textures/Button3.png");
+	for (int i = 0; i < BUTTON_NUM; i++) {
+		sf::Texture TempTexture;
+		TempTexture.loadFromFile("Resources/Textures/Button" + std::to_string(i) + ".png");
+		Buttons_Texture[i] = TempTexture;
+	}
+
 	menuMode = 0;
 }
 
 void Menu::DrawMenu(sf::RenderWindow& i_window) {
 	if (menuMode == 0) {
-		sf::Sprite menu1(Texture_Button1), menu2(Texture_Button2), menu3(Texture_Button3), about(Texture_Button1);
+		sf::Sprite menu1(Buttons_Texture[0]), menu2(Buttons_Texture[1]), menu3(Buttons_Texture[2]), about(Buttons_Texture[0]);
 		menu1.scale(SCREEN_RESIZE, SCREEN_RESIZE);
 		menu2.scale(SCREEN_RESIZE, SCREEN_RESIZE);
 		menu3.scale(SCREEN_RESIZE, SCREEN_RESIZE);
@@ -66,8 +69,55 @@ void Menu::DrawMenu(sf::RenderWindow& i_window) {
 	}
 
 	if (menuMode == 2) {
-		sf::Sprite menu1(Texture_Button1), menu2(Texture_Button2), menu3(Texture_Button3), about(Texture_Button1);
-		i_window.draw(about);
+		int optionNum = 0;
+		sf::Sprite menu1(Buttons_Texture[3]), menu2(Buttons_Texture[4]), menu3(Buttons_Texture[5]), menu4(Buttons_Texture[6]);
+		menu1.scale(SCREEN_RESIZE, SCREEN_RESIZE);
+		menu2.scale(SCREEN_RESIZE, SCREEN_RESIZE);
+		menu3.scale(SCREEN_RESIZE, SCREEN_RESIZE);
+		menu4.scale(SCREEN_RESIZE, SCREEN_RESIZE);
+		menu1.setPosition(-menu1.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 0);
+		menu2.setPosition(-menu2.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 1 * SCREEN_HEIGHT / 4);
+		menu3.setPosition(-menu3.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 2 * SCREEN_HEIGHT / 4);
+		menu4.setPosition(-menu4.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 3 * SCREEN_HEIGHT / 4);
+		optionNum = 0;
+		if (sf::IntRect(-menu2.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 1 * SCREEN_HEIGHT / 4, +menu2.getGlobalBounds().width, menu2.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
+		{
+			menu2.setColor(sf::Color::Blue);
+			optionNum = 1;
+		}
+		if (sf::IntRect(-menu3.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 2 * SCREEN_HEIGHT / 4, +menu3.getGlobalBounds().width, menu3.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
+		{
+			menu3.setColor(sf::Color::Blue);
+			optionNum = 2;
+		}
+		if (sf::IntRect(-menu4.getGlobalBounds().width / 2 + SCREEN_WIDTH / 2, 3 * SCREEN_HEIGHT / 4, +menu4.getGlobalBounds().width, menu4.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
+		{
+			menu4.setColor(sf::Color::Blue);
+			optionNum = 3;
+		}
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			if (optionNum == 0) {
+				
+			}
+			if (optionNum == 1) 
+			{
+				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+			}
+			if (optionNum == 2) {
+				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / 1.5, SCREEN_HEIGHT / 1.5));
+			}
+			if (optionNum == 3)
+			{
+				i_window.setSize(sf::Vector2u(SCREEN_WIDTH / 1, SCREEN_HEIGHT / 1));
+			}
+
+		}
+		i_window.draw(menu1);
+		i_window.draw(menu2);
+		i_window.draw(menu3);
+		i_window.draw(menu4);
 		i_window.display();
 	}
 }

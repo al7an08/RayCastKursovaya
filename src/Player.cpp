@@ -16,6 +16,7 @@ Player::Player(float i_x, float i_y, float i_hp) : // Конструктор к�
 	y(i_y),
 	hp(i_hp),
 	map_player_sprite(map_player_texture)
+
 {
 	map_player_texture.loadFromFile("Resources/Images/MapPlayer" + std::to_string(MAP_CELL_SIZE) + ".png"); // Загрузка текстуры из файла
 

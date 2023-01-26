@@ -1,12 +1,13 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include <array>
+#include "Header.h"
 
 
 class Menu
 {
 private:
-	sf::Texture Texture_Button1, Texture_Button2, Texture_Button3;
-	sf::Sprite Sprite_Button1, Sprite_Button2, Sprite_Button3;
+	std::array<sf::Texture, BUTTON_NUM> Buttons_Texture;
 	bool isMenu = 1;
 	int menuNum;
 	int menuMode;
