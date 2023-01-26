@@ -16,7 +16,7 @@
 int main()
 {
 	//Значение от которого зависит, есть ли миникарта или нет
-	bool draw_map = 1;
+	bool draw_map = true;
 
 	std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map{};
 
@@ -39,8 +39,18 @@ int main()
 	sf::Texture map_grid_cell_texture;
 	map_grid_cell_texture.loadFromFile("Resources/Images/MapGridCell.png");
 
-	sf::Texture map_wall_texture;
-	map_wall_texture.loadFromFile("Resources/Images/MapWall" + std::to_string(MAP_CELL_SIZE) + ".png");
+	std::array<sf::Texture, NUM_WALL_TYPES> map_wall_textures;
+	std::array<sf::Sprite, NUM_WALL_TYPES> map_wall_sprites;
+
+	for (int i = 0; i < NUM_WALL_TYPES; i++) {
+		sf::Texture temp_texture;
+		temp_texture.loadFromFile("Resources/Images/MapWall" + std::to_string(i) + std::to_string(MAP_CELL_SIZE) + ".png");
+		map_wall_textures[i] = temp_texture;
+		sf::Sprite temp_sprite;
+		temp_sprite.setTexture(temp_texture);
+		map_wall_sprites[i] = (temp_sprite);
+	}
+
 
 	Player player(0, 0, 100);
 
@@ -48,7 +58,6 @@ int main()
 
 	map_grid_cell_sprite.setTexture(map_grid_cell_texture);
 	map_grid_cell_sprite.setTextureRect(sf::IntRect(0, 0, MAP_GRID_CELL_SIZE, MAP_GRID_CELL_SIZE));
-	map_wall_sprite.setTexture(map_wall_texture);
 
 	previous_time = std::chrono::steady_clock::now();
 
@@ -74,27 +83,29 @@ int main()
 			{
 				switch (event.key.code)
 				{
-				case sf::Keyboard::H:
-				{
-					if (draw_map == 1) {
-						draw_map = 0;
+					case sf::Keyboard::M:
+					{
+						if (draw_map == true) {
+							draw_map = false;
+						}
+						else {
+							draw_map = true;
+						}
+						break;
 					}
-					else {
-						draw_map = 1;
+
+					case sf::Keyboard::Z:
+					{
+						window.close();
+
+						break;
 					}
-				}
-				case sf::Keyboard::Z:
-				{
-					window.close();
+					case sf::Keyboard::Escape:
+					{
+						menu.SetIsOpen();
 
-					break;
-				}
-				case sf::Keyboard::Escape:
-				{
-					menu.SetIsOpen();
-
-					break;
-				}
+						break;
+					}
 				}
 			}
 			}
@@ -106,7 +117,7 @@ int main()
 			menu.DrawMenu(window);
 		}
 		else {
-
+			window.setMouseCursorVisible(false);
 			while (FRAME_DURATION <= lag)
 			{
 				lag -= FRAME_DURATION;
@@ -120,7 +131,7 @@ int main()
 
 					player.draw_screen(window, map);
 
-					if (1 == draw_map)
+					if (draw_map)
 					{
 						for (unsigned short a = 0; a < ceil(MAP_CELL_SIZE * MAP_WIDTH / static_cast<float>(MAP_GRID_CELL_SIZE)); a++)
 						{
@@ -136,17 +147,13 @@ int main()
 						{
 							for (unsigned short b = 0; b < MAP_HEIGHT; b++)
 							{
-								if (Cell::Empty != map[a][b])
-								{
-									map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
-
-									window.draw(map_wall_sprite);
-								}
-								else if (Cell::Wall1 == map[a][b])
-								{
-									map_wall_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
-
-									window.draw(map_wall_sprite);
+								for (int i = 1; i <= NUM_WALL_TYPES; i++) {
+									if (i == map[a][b]) {
+										sf::Sprite temp_sprite;
+										temp_sprite.setTexture(map_wall_textures[i - 1]);
+										temp_sprite.setPosition(static_cast<float>(MAP_CELL_SIZE * a), static_cast<float>(MAP_CELL_SIZE * b));
+										window.draw(temp_sprite); // Рисование спрайта
+									}
 								}
 							}
 						}
