@@ -91,7 +91,10 @@ int main()
 
 	std::string level = "Resources/Levels/level_map1.png";
 	std::array<std::string, LEVELS_NUM> levels;
-
+	/// <summary>
+	//dsadsad
+	/// </summary>
+	/// <returns></returns>
 	for (int i = 0; i < LEVELS_NUM; i++) {
 		levels[i] = ("Resources/Levels/level_map" + std::to_string(i + 1) + ".png");
 	}
