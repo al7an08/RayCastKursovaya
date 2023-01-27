@@ -15,6 +15,31 @@
 
 int main()
 {
+	Menu menu1;
+	menu1.Set_Screen_Resize(2.f);
+	sf::RenderWindow window_1(sf::VideoMode(960, 540), "Set resolution");
+
+	// run the program as long as the window is open
+	while (window_1.isOpen())
+	{
+		// check all the window's events that were triggered since the last iteration of the loop
+		sf::Event event1;
+		while (window_1.pollEvent(event1))
+		{
+			// "close requested" event: we close the window
+			if (event1.type == sf::Event::Closed)
+				window_1.close();
+		}
+
+		menu1.Set_mode(2);
+
+		menu1.DrawMenu(window_1);
+
+
+	}
+
+	const float SCREEN_RESIZE = menu1.Get_Screen_Resize();
+
 	//Значение от которого зависит, есть ли миникарта или нет
 	bool draw_map = true;
 
@@ -28,13 +53,19 @@ int main()
 	sf::Event event;
 
 
-	Menu menu;
-	sf::RenderWindow window(sf::VideoMode(1 * SCREEN_WIDTH, 1 * SCREEN_HEIGHT), "RayCaster", sf::Style::Close);
-	window.setMouseCursorVisible(0);
+	sf::RenderWindow window(sf::VideoMode(int(SCREEN_WIDTH / SCREEN_RESIZE), int(SCREEN_HEIGHT / SCREEN_RESIZE)), "RayCaster", sf::Style::Close);
 	window.setView(sf::View(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)));
 
 	sf::Sprite map_grid_cell_sprite;
 	sf::Sprite map_wall_sprite;
+	Menu menu;
+
+	unsigned short window_center_x = static_cast<unsigned short>(round(0.5f * window.getSize().x));
+	unsigned short window_center_y = static_cast<unsigned short>(round(0.5f * window.getSize().y));
+
+	sf::Mouse::setPosition(sf::Vector2i(window_center_x, window_center_y), window);
+
+	menu.Set_Screen_Resize(menu1.Get_Screen_Resize());
 
 	sf::Texture map_grid_cell_texture;
 	map_grid_cell_texture.loadFromFile("Resources/Images/MapGridCell.png");
@@ -51,7 +82,7 @@ int main()
 		map_wall_sprites[i] = (temp_sprite);
 	}
 
-
+	window.setMouseCursorVisible(false);
 	Player player(0, 0, 100);
 
 	map = convert_sketch(player);
