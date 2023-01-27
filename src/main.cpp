@@ -13,10 +13,14 @@
 //#pragma comment(lib, "sfml-system.lib")
 
 
+bool draw_map = true;
+
+std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map{};
+
 int main()
 {
-	Menu menu1;
-	menu1.Set_Screen_Resize(2.f);
+	Menu* menu1 = new Menu;
+	menu1->Set_Screen_Resize(2.f);
 	sf::RenderWindow window_1(sf::VideoMode(960, 540), "Set resolution");
 
 	// run the program as long as the window is open
@@ -31,19 +35,17 @@ int main()
 				window_1.close();
 		}
 
-		menu1.Set_mode(2);
+		menu1->Set_mode(2);
 
-		menu1.DrawMenu(window_1);
+		menu1->DrawMenu(window_1);
 
 
 	}
 
-	const float SCREEN_RESIZE = menu1.Get_Screen_Resize();
+	const float SCREEN_RESIZE = menu1->Get_Screen_Resize();
+
 
 	//Значение от которого зависит, есть ли миникарта или нет
-	bool draw_map = true;
-
-	std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map{};
 
 	//Это переменная нужна, чтобы избавиться от зависимости от количества кадров в секунду
 	std::chrono::microseconds lag(0);
@@ -60,12 +62,14 @@ int main()
 	sf::Sprite map_wall_sprite;
 	Menu menu;
 
-	unsigned short window_center_x = static_cast<unsigned short>(round(0.5f * window.getSize().x));
+	unsigned short window_center_x = static_cast<unsigned short>(round(0.5f * window.getSize().x)); // Координаты середины окна
 	unsigned short window_center_y = static_cast<unsigned short>(round(0.5f * window.getSize().y));
 
 	sf::Mouse::setPosition(sf::Vector2i(window_center_x, window_center_y), window);
 
-	menu.Set_Screen_Resize(menu1.Get_Screen_Resize());
+	menu.Set_Screen_Resize(menu1->Get_Screen_Resize());
+
+	delete menu1;
 
 	sf::Texture map_grid_cell_texture;
 	map_grid_cell_texture.loadFromFile("Resources/Images/MapGridCell.png");
@@ -85,7 +89,14 @@ int main()
 	window.setMouseCursorVisible(false);
 	Player player(0, 0, 100);
 
-	map = convert_sketch(player);
+	std::string level = "Resources/Levels/level_map1.png";
+	std::array<std::string, LEVELS_NUM> levels;
+
+	for (int i = 0; i < LEVELS_NUM; i++) {
+		levels[i] = ("Resources/Levels/level_map" + std::to_string(i + 1) + ".png");
+	}
+
+	map = convert_sketch(player, level);
 
 	map_grid_cell_sprite.setTexture(map_grid_cell_texture);
 	map_grid_cell_sprite.setTextureRect(sf::IntRect(0, 0, MAP_GRID_CELL_SIZE, MAP_GRID_CELL_SIZE));
@@ -133,8 +144,8 @@ int main()
 					}
 					case sf::Keyboard::Escape:
 					{
+						menu.Set_mode(0);
 						menu.SetIsOpen();
-
 						break;
 					}
 				}
@@ -146,6 +157,11 @@ int main()
 			window.clear(sf::Color(73, 255, 255));
 			window.setMouseCursorVisible(true);
 			menu.DrawMenu(window);
+			if (menu.IsLevelChanged()) {
+				std::string level = levels[menu.Get_Level_Num() - 1];
+				map = convert_sketch(player, level);
+				menu.set_is_level_changed();
+			}
 		}
 		else {
 			window.setMouseCursorVisible(false);

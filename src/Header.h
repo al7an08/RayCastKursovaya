@@ -1,6 +1,6 @@
 #pragma once
 #include <chrono>
-
+#include <string>
 
 constexpr float FOV_HORIZONTAL = 90;
 constexpr float FOV_VERTICAL = 58.75f;
@@ -29,7 +29,9 @@ constexpr unsigned short SCREEN_HEIGHT = 1080;
 constexpr unsigned short SCREEN_WIDTH = 1920;
 
 
-constexpr unsigned char BUTTON_NUM = 8;
+constexpr unsigned char BUTTON_NUM = 11;
+
+constexpr unsigned char LEVELS_NUM = 11;
 
 
 //Если у нас 60 кадров в 1 секунде, то каждый кадр будет длится 16.667 мс
@@ -44,3 +46,5 @@ enum Cell
 	Instruction,
 	Wall3
 };
+
+
