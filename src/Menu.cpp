@@ -82,10 +82,10 @@ void Menu::DrawMenu(sf::RenderWindow& i_window) {
 		float WIDTH = SCREEN_WIDTH / SCREEN_RESIZE;
 		float HEIGHT = SCREEN_HEIGHT / SCREEN_RESIZE;
 
-		menu1.setPosition(-menu1.getLocalBounds().width / 2 + (WIDTH) / 2, 0);
-		menu2.setPosition(-menu2.getLocalBounds().width / 2 + (WIDTH) / 2, 1 * (HEIGHT) / 4);
-		menu3.setPosition(-menu3.getLocalBounds().width / 2 + (WIDTH) / 2, 2 * (HEIGHT) / 4);
-		menu4.setPosition(-menu4.getLocalBounds().width / 2 + (WIDTH) / 2, 3 * (HEIGHT) / 4);
+		menu1.setPosition(-menu1.getGlobalBounds().width / 2 + (WIDTH) / 2, 0);
+		menu2.setPosition(-menu2.getGlobalBounds().width / 2 + (WIDTH) / 2, 1 * (HEIGHT) / 4);
+		menu3.setPosition(-menu3.getGlobalBounds().width / 2 + (WIDTH) / 2, 2 * (HEIGHT) / 4);
+		menu4.setPosition(-menu4.getGlobalBounds().width / 2 + (WIDTH) / 2, 3 * (HEIGHT) / 4);
 
 		i_window.clear(sf::Color(129, 181, 221));
 
@@ -136,10 +136,10 @@ void Menu::DrawMenu(sf::RenderWindow& i_window) {
 		menu3.scale(1 / (SCREEN_RESIZE), 1 / (SCREEN_RESIZE));
 		menu4.scale(1 / (SCREEN_RESIZE), 1 / (SCREEN_RESIZE));
 
-		menu1.setPosition(-menu1.getLocalBounds().width / SCREEN_RESIZE / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 0);
-		menu2.setPosition(-menu2.getLocalBounds().width / SCREEN_RESIZE / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 1 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4);
-		menu3.setPosition(-menu3.getLocalBounds().width / SCREEN_RESIZE / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 2 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4);
-		menu4.setPosition(-menu4.getLocalBounds().width / SCREEN_RESIZE / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 3 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4);
+		menu1.setPosition(-menu1.getGlobalBounds().width / 2 + (SCREEN_WIDTH ) / 2, 0);
+		menu2.setPosition(-menu2.getGlobalBounds().width / 2 + (SCREEN_WIDTH ) / 2, 1 * (SCREEN_HEIGHT ) / 4);
+		menu3.setPosition(-menu3.getGlobalBounds().width / 2 + (SCREEN_WIDTH ) / 2, 2 * (SCREEN_HEIGHT ) / 4);
+		menu4.setPosition(-menu4.getGlobalBounds().width / 2 + (SCREEN_WIDTH ) / 2, 3 * (SCREEN_HEIGHT ) / 4);
 
 		if (sf::IntRect(-menu2.getGlobalBounds().width / 2 + (SCREEN_WIDTH / SCREEN_RESIZE) / 2, 1 * (SCREEN_HEIGHT / SCREEN_RESIZE) / 4, +menu2.getGlobalBounds().width, menu2.getGlobalBounds().height).contains(sf::Mouse::getPosition(i_window)))
 		{
