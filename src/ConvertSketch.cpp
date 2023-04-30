@@ -4,21 +4,38 @@
 #include <iostream>
 
 // Создание уровня из изображения, цвет каждого пикселя соответсвует с одним из объектов, а его расположение соответсвует расположению на карте
-std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> convert_sketch(Player& i_player, std::string level)
+std::vector<std::vector<Cell>> convert_sketch(Player& i_player, std::string level)
 {
-	std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> output_map{};
 
 	sf::Image map_sketch;
-
+ 
 	if (!map_sketch.loadFromFile(level)) {
 		std::cout << "Не найдено изображение уровня" << std::endl;
 		std::cout << "Загружается стандартный уровень";
 		map_sketch.loadFromFile("Resources/Levels/level_map1.png");
 	}
 
-	for (unsigned char a = 0; a < MAP_WIDTH; a++)
+	int new_map_height = map_sketch.getSize().y;
+	int new_map_width = map_sketch.getSize().x;
+
+
+	std::vector<std::vector<Cell>> output_map{};
+
+	for (int i = 0; i < new_map_width; i++)
 	{
-		for (unsigned char b = 0; b < MAP_HEIGHT; b++)
+		// построить vector из int
+		std::vector<Cell> v;
+		for (int j = 0; j < new_map_height; j++) {
+			v.push_back(Cell::Empty);
+		}
+
+		// отодвигаем назад над одномерным вектором
+		output_map.push_back(v);
+	}
+
+	for (unsigned char a = 0; a < new_map_width; a++)
+	{
+		for (unsigned char b = 0; b < new_map_height; b++)
 		{
 			sf::Color pixel = map_sketch.getPixel(a, b);
 

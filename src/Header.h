@@ -17,8 +17,8 @@ constexpr unsigned char CELL_SIZE = 64;
 //Размер ячейки на миникарте
 constexpr unsigned char MAP_CELL_SIZE = 8;
 constexpr unsigned char MAP_GRID_CELL_SIZE = 16;
-constexpr unsigned char MAP_HEIGHT = 32;
-constexpr unsigned char MAP_WIDTH = 32;
+//constexpr unsigned char MAP_HEIGHT = 32;
+//constexpr unsigned char MAP_WIDTH = 32;
 
 
 //extern unsigned char SCREEN_RESIZE = 1;

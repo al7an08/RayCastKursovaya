@@ -15,7 +15,7 @@
 
 bool draw_map = true;
 
-std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH> map{};
+std::vector<std::vector<Cell>> map{};
 
 int main()
 {
@@ -97,6 +97,10 @@ int main()
 
 	map = convert_sketch(player, level);
 
+	int MAP_HEIGHT = map[0].size();
+	int MAP_WIDTH = map.size();
+
+
 	map_grid_cell_sprite.setTexture(map_grid_cell_texture);
 	map_grid_cell_sprite.setTextureRect(sf::IntRect(0, 0, MAP_GRID_CELL_SIZE, MAP_GRID_CELL_SIZE));
 
@@ -160,9 +164,13 @@ int main()
 				std::string level = levels[menu.Get_Level_Num() - 1];
 				map = convert_sketch(player, level);
 				menu.set_is_level_changed();
+				int MAP_HEIGHT = map[0].size();
+				int MAP_WIDTH = map.size();
 			}
 		}
 		else {
+			int MAP_HEIGHT = map[0].size();
+			int MAP_WIDTH = map.size();
 			window.setMouseCursorVisible(false);
 			while (FRAME_DURATION <= lag)
 			{

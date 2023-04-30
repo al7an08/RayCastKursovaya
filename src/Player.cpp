@@ -63,8 +63,11 @@ void Player::draw_map(sf::RenderWindow& i_window) // отрисовка мини
 	i_window.draw(map_player_sprite);
 }
 
-void Player::draw_screen(sf::RenderWindow& i_window, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
+void Player::draw_screen(sf::RenderWindow& i_window, std::vector<std::vector<Cell>>& i_map)
 {
+	int MAP_HEIGHT = i_map[0].size();
+	int MAP_WIDTH = i_map.size();
+
 	bool draw_enemies = 0;
 	//Это расстояние, когда высота проекции и высота стены перед игроком равны
 	float projection_distance = 0.5f * CELL_SIZE / tan(deg_to_rad(0.5f * FOV_VERTICAL));
@@ -272,7 +275,7 @@ void Player::set_position(float i_x, float i_y) // Метод выставляю
 	y = i_y;
 }
 
-void Player::update(const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map, const sf::RenderWindow& i_window)
+void Player::update(std::vector<std::vector<Cell>>& i_map, const sf::RenderWindow& i_window)
 {
 	//Поворот по вертикали и горизонтали
 	float rotation_horizontal = 0;

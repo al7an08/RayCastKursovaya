@@ -1,12 +1,17 @@
 #include <array>
 #include <chrono>
 #include "MapCollision.h"
+#include <vector>
 
 //Коллизия, чтобы игрок не смог проходить через стены
-bool map_collision(float i_x, float i_y, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map)
+bool map_collision(float i_x, float i_y, std::vector<std::vector<Cell>>& i_map)
 {
 	float cell_x = i_x / CELL_SIZE; // координата x в позиции в ячейке
 	float cell_y = i_y / CELL_SIZE; // координата y в позиции в ячейке
+
+	int MAP_HEIGHT = i_map[0].size();
+	int MAP_WIDTH = i_map.size();
+
 
 	for (unsigned char a = 0; a < 4; a++)
 	{

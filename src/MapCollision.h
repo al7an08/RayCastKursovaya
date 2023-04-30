@@ -1,4 +1,5 @@
 #pragma once
 #include "Header.h"
+#include <vector>
 
-bool map_collision(float i_x, float i_y, const std::array<std::array<Cell, MAP_HEIGHT>, MAP_WIDTH>& i_map);
+bool map_collision(float i_x, float i_y, std::vector<std::vector<Cell>>& i_map);
